@@ -1,6 +1,7 @@
 import { draftHasCommercialClaim } from "@/features/ai/output";
 import type { BookingDocument } from "@/features/bookings/types";
 import { demoConsultants } from "@/features/demo/data";
+import { replyMessage } from "@/features/messaging/templates";
 
 export type LeadChange =
   | { kind: "status"; value: string }
@@ -8,7 +9,11 @@ export type LeadChange =
   | { kind: "contact" }
   | { kind: "reply"; value: string; reviewed: boolean };
 
-export function buildLeadUpdate(change: LeadChange, lead: BookingDocument) {
+export function buildLeadUpdate(
+  change: LeadChange,
+  lead: BookingDocument,
+  now = Date.now(),
+) {
   switch (change.kind) {
     case "contact":
       return {
@@ -41,7 +46,10 @@ export function buildLeadUpdate(change: LeadChange, lead: BookingDocument) {
         return "Review a reply of 1–2,000 characters before sending.";
       if (draftHasCommercialClaim(change.value))
         return "Remove pricing and discount language before sending. Prices come from the admin table.";
-      return { $push: { messages: `Simulated reply: ${change.value.trim()}` } };
+      // Sent on behalf of the assigned consultant, who owns the conversation.
+      return {
+        $push: { messages: replyMessage(change.value, lead.consultant, now) },
+      };
     }
     default:
       return "Invalid lead update.";

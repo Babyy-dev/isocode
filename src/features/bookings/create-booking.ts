@@ -7,6 +7,7 @@ import { assignConsultant } from "@/features/leads/assignment";
 import { BookingError, validateBooking } from "./validation";
 import type { BookingDocument, BookingInput } from "./types";
 import { matchesRequest } from "./rules";
+import { acknowledgementMessage } from "@/features/messaging/templates";
 
 export async function createBooking(
   input: BookingInput,
@@ -60,14 +61,19 @@ async function reserveBooking(
   buyerEmail: string,
 ) {
   validateBooking(input);
-  await lockAndCheckSlot(database, session, input);
+  const car = await lockAndCheckSlot(database, session, input);
   const price = await currentPrice(database, session, input);
   const consultant = await chooseConsultant(database, session, input);
+  const booking = makeBooking(input, buyerId, buyerEmail, consultant, price);
+  booking.messages.push(
+    acknowledgementMessage(
+      { ...input, carName: `${car.model} ${car.variant}`, consultant },
+      booking.createdAt,
+    ),
+  );
   await database
     .collection<BookingDocument>("bookings")
-    .insertOne(makeBooking(input, buyerId, buyerEmail, consultant, price), {
-      session,
-    });
+    .insertOne(booking, { session });
   return input.requestId;
 }
 
@@ -106,6 +112,7 @@ async function lockAndCheckSlot(
       { session, returnDocument: "after" },
     );
   if (!car) throw new BookingError("This car is no longer available.");
+  return car;
 }
 
 async function currentPrice(
@@ -196,8 +203,6 @@ function makeBooking(
         .toISOString()
         .slice(0, 10),
     },
-    messages: [
-      `Simulated acknowledgement: test drive confirmed. Assigned to ${consultant}. No SMS or WhatsApp sent.`,
-    ],
+    messages: [],
   };
 }

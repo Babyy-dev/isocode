@@ -1,5 +1,6 @@
 import type { CityPrice } from "@/features/pricing/types";
 import type { SavedAssistance } from "@/features/ai/types";
+import type { LeadMessage } from "@/features/messaging/types";
 
 export type BookingInput = {
   requestId: string;
@@ -34,7 +35,7 @@ export type Booking = {
   leadStatus: "New" | "Contacted" | "Won" | "Lost";
   optedOut: boolean;
   price: CityPrice;
-  messages: string[];
+  messages: LeadMessage[];
 };
 
 export type BookingDocument = Omit<Booking, "id"> & {

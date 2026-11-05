@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { replyMessage } from "@/features/messaging/templates";
 import test from "node:test";
 import { leadScope } from "./access";
 import { assignConsultant } from "./assignment";
@@ -64,7 +65,7 @@ test("lead updates reject unreviewed replies and cross-showroom reassignment", (
     "string",
   );
   assert.deepEqual(
-    buildLeadUpdate({ kind: "reply", value: " Hello ", reviewed: true }, lead),
-    { $push: { messages: "Simulated reply: Hello" } },
+    buildLeadUpdate({ kind: "reply", value: " Hello ", reviewed: true }, lead, 42),
+    { $push: { messages: replyMessage("Hello", lead.consultant, 42) } },
   );
 });

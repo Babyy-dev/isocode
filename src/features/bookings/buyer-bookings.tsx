@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 import { calculateOnRoadPrice } from "@/features/pricing/calculate-price";
 import { updateBuyerBooking } from "./actions";
 import type { Booking } from "./types";
+import { MessageTimeline } from "@/features/messaging/components/message-timeline";
 import { formatPrice } from "@/features/cars/presentation";
 
 export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
@@ -101,6 +102,9 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
                 ? "Follow-up messages suppressed."
                 : "Follow-up allowed. External delivery is simulated."}
             </p>
+            <div className="mt-6 border-t border-line pt-5">
+              <MessageTimeline messages={booking.messages} title="Messages to you" />
+            </div>
           </article>
         ))}
       </div>

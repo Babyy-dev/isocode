@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { MessageTimeline } from "@/features/messaging/components/message-timeline";
 import { demoConsultants } from "@/features/demo/data";
 import type { Booking } from "@/features/bookings/types";
 import { changeLead } from "./actions";
@@ -137,17 +138,7 @@ export function LeadDetail({ lead }: { lead: Booking }) {
       <p role="status" className="text-sm text-accent">
         {message}
       </p>
-      <div>
-        <h3 className="text-sm font-semibold">Simulated message history</h3>
-        {lead.messages.map((body, index) => (
-          <p
-            className="mt-3 border-t border-line pt-3 text-xs leading-5"
-            key={index}
-          >
-            {body}
-          </p>
-        ))}
-      </div>
+      <MessageTimeline messages={lead.messages} title="Message history" />
     </section>
   );
 }

@@ -91,7 +91,22 @@ const schemas = {
     optedOut: { bsonType: "bool" },
     consentAt: amount,
     consentVersion: { enum: ["booking-follow-up-v1"] },
-    messages: { bsonType: "array", items: string },
+    messages: {
+      bsonType: "array",
+      items: {
+        bsonType: "object",
+        required: ["kind", "channel", "template", "body", "status", "sentAt", "sentBy"],
+        properties: {
+          kind: { enum: ["acknowledgement", "reply"] },
+          channel: { enum: ["WhatsApp", "SMS"] },
+          template: { bsonType: ["null", "string"] },
+          body: { ...string, maxLength: 2000 },
+          status: { enum: ["simulated"] },
+          sentAt: amount,
+          sentBy: string,
+        },
+      },
+    },
     price: {
       bsonType: "object",
       required: [

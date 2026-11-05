@@ -5,5 +5,7 @@ import { runMigrations } from "./migrations";
 void runDatabaseTask(async (database) => {
   await setupDatabase(database);
   const migrated = await runMigrations(database);
-  console.info(`Migrations: ${migrated.cars} cars' free-text inspections removed.`);
+  console.info(
+    `Migrations: ${migrated.messages} bookings' messages converted, ${migrated.cars} cars' free-text inspections removed.`,
+  );
 });
