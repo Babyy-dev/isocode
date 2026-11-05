@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #202630;
+  --color-muted: #636c78;
+  --color-accent: #183e78;
+  --color-surface: #f5f6f8;
+  --color-line: #e0e4e9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-ink);
+  background: white;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid #527ab5;
+  outline-offset: 4px;
+}
+
+::selection {
+  background: #dce8f9;
+}
+
+.page-container {
+  width: min(100% - 3rem, 1240px);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 3.5vw, 2.65rem);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: 48px;
+  padding: 0.9rem 1.4rem;
+  border-radius: 2px;
+  background: var(--color-accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 150ms ease;
+}
+
+.button-primary:hover {
+  background: #102b55;
+}
+.nav-link {
+  padding-block: 0.6rem;
+}
+.nav-link:hover {
+  color: var(--color-accent);
+}
+
+.field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.field {
+  min-height: 46px;
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  background: white;
+  padding: 0.75rem;
+  color: var(--color-ink);
+  font-size: 0.875rem;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 50;
+  padding: 1rem;
+  background: white;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .page-container {
+    width: calc(100% - 2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
