@@ -18,7 +18,8 @@
     "auth:link-consultant": "node --import tsx scripts/link-consultant.ts",
     "bookings:check": "node --conditions=react-server --import tsx scripts/check-bookings.ts",
     "db:diagnose": "node --import tsx scripts/diagnose-database.ts",
-    "ai:check": "node --conditions=react-server --import tsx scripts/check-ai.ts"
+    "ai:check": "node --conditions=react-server --import tsx scripts/check-ai.ts",
+    "db:seed-demo": "node --conditions=react-server --import tsx scripts/seed-demo.ts"
   },
   "dependencies": {
     "@better-auth/mongo-adapter": "1.7.18",
