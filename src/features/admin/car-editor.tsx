@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { Car } from "@/features/cars/types";
+import { readInspectionForm } from "@/features/inspection/form";
 import { saveCar } from "./car-actions";
 import type { CarInput } from "./car-validation";
 import { CarDetailFields, CarContentFields } from "./car-fields";
@@ -47,7 +48,7 @@ export function CarEditor({
         }),
       owners: value("owners") ? Number(value("owners")) : null,
       registrationMasked: value("registrationMasked"),
-      inspectionReport: value("inspectionReport"),
+      inspection: type === "Used" ? readInspectionForm(form) : null,
       expectedVersion: car?.contentVersion ?? 0,
       photoUrls: value("photoUrls")
         .split("\n")

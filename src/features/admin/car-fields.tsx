@@ -1,4 +1,5 @@
 import type { Car } from "@/features/cars/types";
+import { InspectionFields } from "./inspection-fields";
 
 export function CarDetailFields({
   car,
@@ -197,16 +198,7 @@ export function CarContentFields({
               placeholder="UP32****82"
             />
           </label>
-          <label className="field-label sm:col-span-2">
-            Inspection report
-            <textarea
-              className="field min-h-40"
-              name="inspectionReport"
-              maxLength={4000}
-              defaultValue={car?.inspectionReport}
-              placeholder="Record the inspection date, checks, findings and any known defects. Use synthetic information for the assessment."
-            />
-          </label>
+          <InspectionFields inspection={car?.inspection} />
         </>
       )}
     </div>

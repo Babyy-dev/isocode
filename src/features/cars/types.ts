@@ -1,3 +1,5 @@
+import type { Inspection } from "@/features/inspection/types";
+
 export type CarContent = {
   slug?: string;
   description?: string;
@@ -5,7 +7,7 @@ export type CarContent = {
   specifications?: { label: string; value: string }[];
   owners?: number | null;
   registrationMasked?: string;
-  inspectionReport?: string;
+  inspection?: Inspection | null;
   photoUrls?: string[];
   archived?: boolean;
   contentVersion?: number;

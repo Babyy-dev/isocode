@@ -31,7 +31,26 @@ const optionalCarFields = {
     maximum: 20,
   },
   registrationMasked: string,
-  inspectionReport: { ...string, maxLength: 4000 },
+  inspection: {
+    bsonType: ["null", "object"],
+    required: ["inspectedOn", "checks"],
+    properties: {
+      inspectedOn: string,
+      checks: {
+        bsonType: "array",
+        maxItems: 6,
+        items: {
+          bsonType: "object",
+          required: ["area", "result", "note"],
+          properties: {
+            area: string,
+            result: { enum: ["pass", "attention"] },
+            note: { ...string, maxLength: 200 },
+          },
+        },
+      },
+    },
+  },
 };
 const schemas = {
   cars: {

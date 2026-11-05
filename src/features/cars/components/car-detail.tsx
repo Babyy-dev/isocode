@@ -7,6 +7,7 @@ import { formatPrice, type Language } from "../presentation";
 import type { Car } from "../types";
 
 import type { CityPrice } from "@/features/pricing/types";
+import { InspectionCard } from "@/features/inspection/components/inspection-card";
 
 export function CarDetail({
   car,
@@ -57,7 +58,7 @@ export function CarDetail({
         <div>
           <CarOverview car={car} language={language} />
           {car.type === "Used" && (
-            <InspectionNotice language={language} car={car} />
+            <InspectionCard inspection={car.inspection} language={language} />
           )}
         </div>
         <CarPricePanel
@@ -107,21 +108,5 @@ function DetailHeading({ car, language }: { car: Car; language: Language }) {
         </a>
       </div>
     </div>
-  );
-}
-
-function InspectionNotice({ language, car }: { language: Language; car: Car }) {
-  const copy = carCopy[language];
-
-  return (
-    <section
-      id="inspection"
-      className="mt-12 scroll-mt-8 border border-line bg-surface/60 p-6"
-    >
-      <h2 className="text-lg font-medium">{copy.inspectionTitle}</h2>
-      <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-muted">
-        {car.inspectionReport || copy.inspectionText}
-      </p>
-    </section>
   );
 }

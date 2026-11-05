@@ -24,7 +24,7 @@ export function toCar(document: CarDocument): import("./types").Car {
     specifications: document.specifications ?? [],
     owners: document.owners ?? null,
     registrationMasked: document.registrationMasked ?? "",
-    inspectionReport: document.inspectionReport ?? "",
+    inspection: document.inspection ?? null,
     photoUrls: document.photoUrls ?? [],
     archived: document.archived ?? false,
     contentVersion: document.contentVersion ?? 0,

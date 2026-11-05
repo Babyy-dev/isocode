@@ -85,9 +85,6 @@ export const carCopy = {
       "This car is marked booked in the sample stock. Explore the collection for available cars.",
     seeAvailable: "Explore available cars",
     checkPrice: "See price breakdown",
-    inspectionTitle: "A closer look, before you decide.",
-    inspectionText:
-      "An inspection report, ownership details and masked registration have not been supplied for this car. They will appear here once the vehicle record is completed.",
     specsNote:
       "Photos, colour options and further specifications will be updated from verified vehicle records.",
     footerTitle: "Your next journey starts with a closer look.",
@@ -182,9 +179,6 @@ export const carCopy = {
       "नमूना स्टॉक में यह कार बुक हो चुकी है। उपलब्ध कारों के लिए अन्य विकल्प देखें।",
     seeAvailable: "उपलब्ध कारें देखें",
     checkPrice: "कीमत का विवरण देखें",
-    inspectionTitle: "फ़ैसले से पहले पूरी जानकारी।",
-    inspectionText:
-      "इस कार की निरीक्षण रिपोर्ट, मालिकों की जानकारी और छिपाया गया पंजीकरण नंबर अभी नहीं मिले हैं। रिकॉर्ड पूरा होने पर यहाँ दिखेंगे।",
     specsNote:
       "सत्यापित रिकॉर्ड मिलने पर तस्वीरें, रंग और अन्य विशेषताएँ अपडेट की जाएँगी।",
     footerTitle: "आपका अगला सफ़र, एक नई शुरुआत।",

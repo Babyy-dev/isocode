@@ -1,4 +1,8 @@
 import type { Car, CarContent } from "@/features/cars/types";
+import {
+  InspectionInputError,
+  validateInspection,
+} from "@/features/inspection/validate-inspection";
 
 export class CarInputError extends Error {}
 
@@ -113,12 +117,19 @@ function validateContent(input: CarInput): CarContent {
     }),
     owners: input.type === "Used" ? owners : null,
     registrationMasked: input.type === "Used" ? registrationMasked : "",
-    inspectionReport: text(
-      input.inspectionReport ?? "",
-      "inspection report",
-      4000,
-    ),
+    inspection: input.type === "Used" ? usedCarInspection(input.inspection) : null,
   };
+}
+
+/** Optional until the yard completes it; when present it must be complete and valid. */
+function usedCarInspection(value: unknown) {
+  if (value == null) return null;
+  try {
+    return validateInspection(value);
+  } catch (error) {
+    if (error instanceof InspectionInputError) throw new CarInputError(error.message);
+    throw error;
+  }
 }
 
 export function validatePhotoUrls(value: unknown): string[] {
