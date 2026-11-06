@@ -207,6 +207,16 @@ select {
 .profile-menu {
   position: relative;
 }
+/* Invisible bridge over the gap between the icon and the dropdown, so the pointer
+   stays "inside" the menu while moving down to it. */
+.profile-menu[data-open="true"]::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 14rem;
+  height: 0.8rem;
+}
 .profile-trigger {
   display: inline-flex;
   min-height: 2.75rem;

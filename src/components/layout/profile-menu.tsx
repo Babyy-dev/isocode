@@ -26,10 +26,27 @@ export function ProfileMenu({
   const [signingOut, setSigningOut] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
   const hoverCapable = useRef(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     hoverCapable.current = window.matchMedia("(hover: hover)").matches;
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
   }, []);
+
+  // Hover opens at once but closes after a short grace period, so moving the
+  // pointer from the icon down into the menu never drops it on the way.
+  function hoverOpen() {
+    if (!hoverCapable.current) return;
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  }
+  function hoverClose() {
+    if (!hoverCapable.current) return;
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setOpen(false), 180);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -66,8 +83,8 @@ export function ProfileMenu({
       ref={wrap}
       className="profile-menu"
       data-open={open}
-      onMouseEnter={() => hoverCapable.current && setOpen(true)}
-      onMouseLeave={() => hoverCapable.current && setOpen(false)}
+      onMouseEnter={hoverOpen}
+      onMouseLeave={hoverClose}
     >
       <button
         type="button"
