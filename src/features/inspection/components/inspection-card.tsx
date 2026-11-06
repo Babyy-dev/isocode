@@ -1,4 +1,4 @@
-import type { Language } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
 import { inspectionAreaLabels, inspectionCopy } from "../copy";
 import type { Inspection, InspectionCheck } from "../types";
 import { summariseInspection } from "../validate-inspection";

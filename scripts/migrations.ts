@@ -28,7 +28,7 @@ function fromLegacyText(text: string, booking: BookingDocument): LeadMessage {
   return {
     kind: isReply ? "reply" : "acknowledgement",
     channel: "WhatsApp",
-    template: isReply ? null : ACKNOWLEDGEMENT_TEMPLATE,
+    template: isReply ? null : `${ACKNOWLEDGEMENT_TEMPLATE}_en`,
     body: text.replace(/^Simulated (reply|acknowledgement):\s*/, ""),
     status: "simulated",
     // The original send time was not stored; the booking time is the closest known value.

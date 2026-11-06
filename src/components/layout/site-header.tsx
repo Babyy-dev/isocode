@@ -1,11 +1,14 @@
 import Link from "next/link";
+import { layoutCopy } from "./copy";
+import { LanguageToggle } from "./language-toggle";
 import { carCopy } from "@/features/cars/copy";
-import type { Language } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
 
-type SiteHeaderProps = { language: Language; path?: string };
+type SiteHeaderProps = { language: Language };
 
-export function SiteHeader({ language, path = "/" }: SiteHeaderProps) {
+export function SiteHeader({ language }: SiteHeaderProps) {
   const copy = carCopy[language];
+  const nav = layoutCopy[language].nav;
   const home = language === "hi" ? "/?lang=hi" : "/";
 
   return (
@@ -32,7 +35,7 @@ export function SiteHeader({ language, path = "/" }: SiteHeaderProps) {
           </span>
         </Link>
         <nav
-          aria-label={language === "hi" ? "मुख्य नेविगेशन" : "Main navigation"}
+          aria-label={nav.label}
           className="order-3 flex w-full gap-7 text-sm font-medium sm:order-none sm:w-auto"
         >
           <Link
@@ -48,21 +51,15 @@ export function SiteHeader({ language, path = "/" }: SiteHeaderProps) {
             {copy.usedCars}
           </Link>
           <Link className="nav-link" href="/book">
-            {language === "hi" ? "डेमो बुकिंग" : "Demo booking"}
+            {nav.testDrive}
           </Link>
           <Link className="nav-link" href="/account">
-            {language === "hi" ? "खाता" : "Account"}
+            {nav.account}
           </Link>
         </nav>
         <div className="flex items-center gap-5 text-sm">
           <span className="hidden text-muted lg:inline">{copy.location}</span>
-          <Link
-            className="rounded border border-line px-3 py-2 hover:border-accent"
-            href={`${path}?lang=${language === "en" ? "hi" : "en"}`}
-            hrefLang={language === "en" ? "hi" : "en"}
-          >
-            {language === "en" ? "हिन्दी" : "English"}
-          </Link>
+          <LanguageToggle language={language} />
         </div>
       </div>
     </header>

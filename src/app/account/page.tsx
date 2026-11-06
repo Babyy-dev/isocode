@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { requireSession } from "@/features/auth/session";
 import { normalizeRole } from "@/features/auth/access";
 import { SignOutButton } from "@/features/auth/sign-out-button";
+import { authCopy } from "@/features/auth/copy";
+import { requestLanguage } from "@/lib/i18n/request-language";
+import { LanguageToggle } from "@/components/layout/language-toggle";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -18,32 +21,34 @@ export default async function AccountPage({
   const session = await requireSession("/account");
   const role = normalizeRole(session.user.role);
   const query = await searchParams;
+  const language = await requestLanguage();
+  const copy = authCopy[language].account;
 
   return (
     <main className="page-container py-16">
-      <Link href="/" className="eyebrow">
-        COMPANY A · HOME
-      </Link>
-      <h1 className="section-title mt-6">Welcome, {session.user.name}</h1>
+      <div className="flex items-center justify-between gap-4">
+        <Link href="/" className="eyebrow">
+          COMPANY A · HOME
+        </Link>
+        <LanguageToggle language={language} />
+      </div>
+      <h1 className="section-title mt-6">{copy.title(session.user.name)}</h1>
       <p className="mt-4 text-muted">
-        {session.user.email} · {role}
+        {session.user.email} · {copy.roles[role]}
       </p>
       {query.access === "denied" && (
         <p role="alert" className="mt-6 text-red-700">
-          Your account does not have permission for that workspace.
+          {copy.denied}
         </p>
       )}
       <nav className="my-10 flex flex-wrap gap-6 text-accent">
-        <Link href="/book">Book a test drive ↗</Link>
-        <Link href="/bookings">My bookings ↗</Link>
-        {role !== "buyer" && <Link href="/leads">Lead inbox ↗</Link>}
-        {role === "admin" && <Link href="/admin">Admin ↗</Link>}
+        <Link href="/book">{copy.book} ↗</Link>
+        <Link href="/bookings">{copy.bookings} ↗</Link>
+        {role !== "buyer" && <Link href="/leads">{copy.leads} ↗</Link>}
+        {role === "admin" && <Link href="/admin">{copy.admin} ↗</Link>}
       </nav>
-      <p className="mb-8 max-w-xl text-sm leading-6 text-muted">
-        Your account and session use MongoDB. Booking, price-editing and lead
-        workflows now store records in MongoDB. External messages are simulated.
-      </p>
-      <SignOutButton />
+      <p className="mb-8 max-w-xl text-sm leading-6 text-muted">{copy.note}</p>
+      <SignOutButton language={language} />
     </main>
   );
 }

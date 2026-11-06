@@ -1,5 +1,6 @@
 import { carCopy } from "../copy";
-import { formatKilometres, type Language } from "../presentation";
+import { formatKilometres } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 export function CarOverview({

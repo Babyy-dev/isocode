@@ -16,9 +16,7 @@ export async function consumeBookingAttempt(userId: string, now = Date.now()) {
     );
   } catch (error) {
     if (error instanceof RateLimitError)
-      throw new BookingError(
-        `Too many booking attempts. Try again in ${error.retryAfter} seconds.`,
-      );
+      throw new BookingError("tooManyAttempts", { seconds: error.retryAfter });
     throw error;
   }
 }

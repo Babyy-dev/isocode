@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { requestLanguage } from "@/lib/i18n/request-language";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,11 +11,12 @@ export const metadata: Metadata = {
     "Explore new and pre-owned Brand X cars in Lucknow. Compare the supplied sample stock, prices and vehicle details.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const language = await requestLanguage();
   return (
-    <html lang="en">
+    <html lang={language}>
       <body>{children}</body>
     </html>
   );

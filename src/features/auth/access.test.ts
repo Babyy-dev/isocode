@@ -36,5 +36,6 @@ test("rate limiting and unavailability have distinct user feedback", () => {
   assert.match(authErrorMessage(429, false), /Too many attempts/);
   assert.match(authErrorMessage(429, true), /Too many attempts/);
   assert.match(authErrorMessage(503, false), /temporarily unavailable/);
-  assert.match(authErrorMessage(401, false), /email\/password/);
+  assert.match(authErrorMessage(401, false), /email and password/);
+  assert.match(authErrorMessage(429, false, "hi"), /बहुत अधिक प्रयास/);
 });

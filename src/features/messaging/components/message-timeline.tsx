@@ -1,32 +1,38 @@
+import type { Language } from "@/lib/i18n/language";
+import { messagingCopy } from "../copy";
 import type { LeadMessage } from "../types";
 
 export function MessageTimeline({
   messages,
-  title = "Messages",
+  title,
+  language = "en",
 }: {
   messages: LeadMessage[];
-  title?: string;
+  title: string;
+  language?: Language;
 }) {
+  const copy = messagingCopy[language];
   return (
     <div>
       <h3 className="text-sm font-semibold">{title}</h3>
       {messages.length ? (
         <ol className="mt-3 space-y-4 border-l border-line pl-4">
           {messages.map((message, index) => (
-            <MessageItem key={`${message.sentAt}-${index}`} message={message} />
+            <MessageItem key={`${message.sentAt}-${index}`} message={message} language={language} />
           ))}
         </ol>
       ) : (
-        <p className="mt-3 text-xs text-muted">No messages yet.</p>
+        <p className="mt-3 text-xs text-muted">{copy.empty}</p>
       )}
       <p className="mt-4 text-xs text-muted">
-        Delivery is simulated in this demo: messages are recorded, not sent.
+        {copy.simulated}
       </p>
     </div>
   );
 }
 
-function MessageItem({ message }: { message: LeadMessage }) {
+function MessageItem({ message, language }: { message: LeadMessage; language: Language }) {
+  const copy = messagingCopy[language];
   const automatic = message.sentBy === "system";
   return (
     <li className="relative">
@@ -34,20 +40,24 @@ function MessageItem({ message }: { message: LeadMessage }) {
       <p className="text-xs text-muted">
         <span className="font-medium text-ink">{message.channel}</span>
         {" · "}
-        {automatic ? "Automatic acknowledgement" : `Reply by ${message.sentBy}`}
+        {automatic ? copy.automatic : copy.replyBy(message.sentBy)}
         {" · "}
-        <time dateTime={new Date(message.sentAt).toISOString()}>{formatSentAt(message.sentAt)}</time>
+        <time dateTime={new Date(message.sentAt).toISOString()}>
+          {formatSentAt(message.sentAt, language)}
+        </time>
       </p>
       <p className="mt-1 text-sm leading-6">{message.body}</p>
       {message.template && (
-        <p className="mt-1 text-[0.7rem] text-muted">Template {message.template}</p>
+        <p className="mt-1 text-[0.7rem] text-muted">
+          {copy.template} {message.template}
+        </p>
       )}
     </li>
   );
 }
 
-function formatSentAt(timestamp: number) {
-  return new Intl.DateTimeFormat("en-IN", {
+function formatSentAt(timestamp: number, language: Language) {
+  return new Intl.DateTimeFormat(language === "hi" ? "hi-IN" : "en-IN", {
     day: "numeric",
     month: "short",
     hour: "2-digit",

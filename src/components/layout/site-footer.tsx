@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { carCopy } from "@/features/cars/copy";
-import type { Language } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
 
 export function SiteFooter({ language }: { language: Language }) {
   const copy = carCopy[language];

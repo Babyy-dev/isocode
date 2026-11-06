@@ -7,8 +7,17 @@ import { updateBuyerBooking } from "./actions";
 import type { Booking } from "./types";
 import { MessageTimeline } from "@/features/messaging/components/message-timeline";
 import { formatPrice } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
+import { bookingCopy } from "./copy";
 
-export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
+export function BuyerBookings({
+  bookings,
+  language,
+}: {
+  bookings: Booking[];
+  language: Language;
+}) {
+  const copy = bookingCopy[language].list;
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState("");
   function update(
@@ -18,34 +27,32 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
     startTransition(async () => {
       try {
         const result = await updateBuyerBooking(id, action);
-        setMessage(result.error ?? "Booking updated.");
+        setMessage(result.error ?? copy.updated);
       } catch {
-        setMessage("Unable to update. Please try again.");
+        setMessage(copy.network);
       }
     });
   }
   return (
     <>
-      <p className="eyebrow">YOUR ACCOUNT</p>
-      <h1 className="section-title mt-4">Your test drives</h1>
-      <p className="mt-4 text-muted">
-        Bookings saved to your account. Cancellation releases your slot.
-      </p>
+      <p className="eyebrow">{copy.eyebrow}</p>
+      <h1 className="section-title mt-4">{copy.title}</h1>
+      <p className="mt-4 text-muted">{copy.intro}</p>
       <p role="status" className="mt-4 text-sm text-accent">
         {message}
       </p>
       {!bookings.length && (
         <div className="mt-10 border border-dashed border-line p-10">
-          <p>No bookings yet.</p>
+          <p>{copy.empty}</p>
           <Link href="/book" className="button-primary mt-6">
-            Choose a test drive
+            {copy.choose}
           </Link>
         </div>
       )}
       <div className="mt-8 grid gap-5 md:grid-cols-2">
         {bookings.map((booking) => (
           <article key={booking.id} className="border border-line p-6">
-            <p className="eyebrow">{booking.status}</p>
+            <p className="eyebrow">{copy.status[booking.status]}</p>
             <h2 className="mt-3 text-xl">
               {booking.carId} · {booking.buyer}
             </h2>
@@ -53,10 +60,10 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
               {booking.date} · {booking.time} IST
             </p>
             <p className="mt-2 text-sm text-muted">
-              {booking.showroom} · {booking.consultant}
+              {booking.showroom} · {copy.consultant}: {booking.consultant}
             </p>
             <p className="mt-4 text-sm">
-              Price snapshot:{" "}
+              {copy.snapshot}:{" "}
               {formatPrice(calculateOnRoadPrice(booking.price) / 100)}
             </p>
             <div className="mt-6 flex flex-wrap gap-5">
@@ -66,7 +73,7 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
                   className="text-sm text-accent underline disabled:opacity-40"
                   onClick={() => update(booking.id, "cancel")}
                 >
-                  Cancel booking
+                  {copy.cancel}
                 </button>
               )}
               <button
@@ -76,7 +83,7 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
                   update(booking.id, booking.optedOut ? "opt-in" : "opt-out")
                 }
               >
-                {booking.optedOut ? "Resume follow-up" : "Opt out of follow-up"}
+                {booking.optedOut ? copy.optIn : copy.optOut}
               </button>
               <button
                 disabled={pending}
@@ -88,22 +95,19 @@ export function BuyerBookings({ bookings }: { bookings: Booking[] }) {
                   )
                 }
               >
-                {booking.aiConsent
-                  ? "Withdraw AI permission"
-                  : "Allow OpenAI assistance"}
+                {booking.aiConsent ? copy.aiWithdraw : copy.aiAllow}
               </button>
             </div>
-            <p className="mt-3 text-xs text-muted">
-              AI assistance is optional: stated needs may be sent to OpenAI for
-              staff-reviewed summaries and drafts.
-            </p>
+            <p className="mt-3 text-xs text-muted">{copy.aiNote}</p>
             <p className="mt-4 text-xs text-muted">
-              {booking.optedOut
-                ? "Follow-up messages suppressed."
-                : "Follow-up allowed. External delivery is simulated."}
+              {booking.optedOut ? copy.optedOut : copy.followUp}
             </p>
             <div className="mt-6 border-t border-line pt-5">
-              <MessageTimeline messages={booking.messages} title="Messages to you" />
+              <MessageTimeline
+                messages={booking.messages}
+                title={copy.messages}
+                language={language}
+              />
             </div>
           </article>
         ))}

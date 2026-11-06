@@ -1,12 +1,8 @@
 import Link from "next/link";
 import { CarImage } from "./car-image";
 import { carCopy } from "../copy";
-import {
-  carPath,
-  formatKilometres,
-  formatPrice,
-  type Language,
-} from "../presentation";
+import { carPath, formatKilometres, formatPrice } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 export function CarCard({ car, language }: { car: Car; language: Language }) {

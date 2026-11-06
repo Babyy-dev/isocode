@@ -9,7 +9,7 @@ import {
 } from "./catalogue-filters";
 import { carCopy } from "../copy";
 import { filterCars, type CarFilters } from "../filter-cars";
-import type { Language } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 type CarCatalogueProps = {

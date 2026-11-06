@@ -6,11 +6,11 @@ import { CarDetail } from "@/features/cars/components/car-detail";
 import { listCars, listCities, toCar } from "@/features/cars/repository";
 import { listCityPrices } from "@/features/pricing/repository";
 export const dynamic = "force-dynamic";
-import { carPath, getLanguage } from "@/features/cars/presentation";
+import { carPath } from "@/features/cars/presentation";
+import { requestLanguage } from "@/lib/i18n/request-language";
 
 type CarPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 async function findCar(slug: string) {
@@ -32,14 +32,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function CarPage({ params, searchParams }: CarPageProps) {
+export default async function CarPage({ params }: CarPageProps) {
   const { slug } = await params;
-  const query = await searchParams;
   const car = await findCar(slug);
 
   if (!car) notFound();
 
-  const language = getLanguage(query.lang);
+  const language = await requestLanguage();
   const [prices, cities] = await Promise.all([
     listCityPrices(car.stockId, true),
     listCities(),
@@ -47,7 +46,7 @@ export default async function CarPage({ params, searchParams }: CarPageProps) {
 
   return (
     <div lang={language}>
-      <SiteHeader language={language} path={`/cars/${slug}`} />
+      <SiteHeader language={language} />
       <CarDetail
         car={car}
         language={language}

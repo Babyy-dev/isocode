@@ -1,4 +1,4 @@
-import type { Language } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { InspectionArea } from "./types";
 
 export const inspectionAreaLabels: Record<Language, Record<InspectionArea, string>> = {

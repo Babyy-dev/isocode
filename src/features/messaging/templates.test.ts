@@ -15,7 +15,7 @@ const fields = {
 
 test("acknowledgement names the consultant, slot and opt-out", () => {
   const message = acknowledgementMessage(fields, 1000);
-  assert.equal(message.template, ACKNOWLEDGEMENT_TEMPLATE);
+  assert.equal(message.template, `${ACKNOWLEDGEMENT_TEMPLATE}_en`);
   assert.equal(message.sentBy, "system");
   assert.equal(message.status, "simulated");
   assert.match(message.body, /^Hello Neha,/);
@@ -24,8 +24,18 @@ test("acknowledgement names the consultant, slot and opt-out", () => {
   assert.match(message.body, /Reply STOP to opt out\.$/);
 });
 
-test("acknowledgement never quotes prices or discounts", () => {
-  assert.equal(draftHasCommercialClaim(acknowledgementMessage(fields, 0).body), false);
+test("Hindi acknowledgement uses the Hindi template and keeps the slot details", () => {
+  const message = acknowledgementMessage(fields, 1000, "hi");
+  assert.equal(message.template, `${ACKNOWLEDGEMENT_TEMPLATE}_hi`);
+  assert.match(message.body, /^नमस्ते Neha,/);
+  assert.match(message.body, /14:30 बजे/);
+  assert.match(message.body, /Consultant 1A आपके सलाहकार हैं/);
+  assert.match(message.body, /STOP/);
+});
+
+test("acknowledgement never quotes prices or discounts in either language", () => {
+  for (const language of ["en", "hi"] as const)
+    assert.equal(draftHasCommercialClaim(acknowledgementMessage(fields, 0, language).body), false);
 });
 
 test("consultant replies are free text attributed to the consultant", () => {

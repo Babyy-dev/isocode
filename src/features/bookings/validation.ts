@@ -1,44 +1,51 @@
 import { demoShowrooms, demoTimes } from "@/features/demo/data";
 import { endOfIndiaDate } from "@/features/pricing/validate-price";
 import type { BookingInput } from "./types";
+import type { BookingErrorCode } from "./copy";
 
-export class BookingError extends Error {}
+/** Carries a message key; the action translates it into the visitor's language. */
+export class BookingError extends Error {
+  constructor(
+    readonly code: BookingErrorCode,
+    readonly params: Record<string, string | number> = {},
+  ) {
+    super(code);
+  }
+}
 
 export function validateBooking(input: BookingInput, now = Date.now()) {
   if (!input || typeof input !== "object")
-    throw new BookingError("Invalid booking.");
+    throw new BookingError("invalid");
   if (input.aiConsent !== undefined && typeof input.aiConsent !== "boolean")
-    throw new BookingError("Choose whether to allow AI assistance.");
+    throw new BookingError("aiConsentChoice");
   if (input.consent !== true)
-    throw new BookingError(
-      "Consent is required to book and arrange follow-up.",
-    );
+    throw new BookingError("consentRequired");
   if (
     typeof input.requestId !== "string" ||
     !/^[a-f0-9-]{36}$/.test(input.requestId)
   )
-    throw new BookingError("Reload the form and try again.");
+    throw new BookingError("reload");
   if (
     typeof input.carId !== "string" ||
     !/^[\w-]{1,80}$/.test(input.carId) ||
     typeof input.cityId !== "string" ||
     !/^[a-z-]{1,80}$/.test(input.cityId)
   )
-    throw new BookingError("Choose a car and city.");
+    throw new BookingError("carAndCity");
   if (!Number.isSafeInteger(input.priceVersion) || input.priceVersion < 1)
-    throw new BookingError("An available price is required.");
+    throw new BookingError("priceRequired");
   if (
     !demoShowrooms.includes(input.showroom) ||
     !demoTimes.includes(input.time)
   )
-    throw new BookingError("Choose a showroom and a listed slot.");
+    throw new BookingError("showroomSlot");
   try {
     endOfIndiaDate(input.date);
   } catch {
-    throw new BookingError("Choose a valid date.");
+    throw new BookingError("validDate");
   }
   if (Date.parse(`${input.date}T${input.time}:00+05:30`) <= now)
-    throw new BookingError("Choose a future slot.");
+    throw new BookingError("futureSlot");
   if (
     typeof input.buyer !== "string" ||
     !input.buyer.trim() ||
@@ -46,7 +53,5 @@ export function validateBooking(input: BookingInput, now = Date.now()) {
     typeof input.needs !== "string" ||
     input.needs.length > 1000
   )
-    throw new BookingError(
-      "Check your name and preferences (up to 1,000 characters).",
-    );
+    throw new BookingError("nameNeeds");
 }

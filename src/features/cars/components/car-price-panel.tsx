@@ -6,7 +6,8 @@ import { indiaDate } from "@/lib/date";
 import { calculateOnRoadPrice } from "@/features/pricing/calculate-price";
 import type { CityPrice } from "@/features/pricing/types";
 import { carCopy } from "../copy";
-import { formatPrice, type Language } from "../presentation";
+import { formatPrice } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 export function CarPricePanel({

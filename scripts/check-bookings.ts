@@ -93,7 +93,7 @@ async function checkReservations(database: Db) {
   const attempts = [first, { ...first, requestId: randomUUID() }];
   const results = await Promise.allSettled(
     attempts.map((request) =>
-      createBooking(request, "buyer-a", "buyer-a@example.invalid"),
+      createBooking(request, { id: "buyer-a", email: "buyer-a@example.invalid" }),
     ),
   );
   assert.equal(
@@ -104,7 +104,7 @@ async function checkReservations(database: Db) {
   const winningInput =
     attempts[results.findIndex((result) => result.status === "fulfilled")];
   assert.equal(
-    await createBooking(winningInput, "buyer-a", "buyer-a@example.invalid"),
+    await createBooking(winningInput, { id: "buyer-a", email: "buyer-a@example.invalid" }),
     winningInput.requestId,
   );
   assert.equal((await buyerBookings("buyer-b")).length, 0);
@@ -120,8 +120,7 @@ async function checkReservations(database: Db) {
   );
   await createBooking(
     { ...first, requestId: randomUUID(), priceVersion: 2 },
-    "buyer-b",
-    "buyer-b@example.invalid",
+    { id: "buyer-b", email: "buyer-b@example.invalid" },
   );
   assert.equal(
     await database
@@ -182,10 +181,9 @@ async function checkPriceSnapshot(database: Db, id: string) {
     () =>
       createBooking(
         { ...input(), time: "11:00" },
-        "buyer-b",
-        "buyer-b@example.invalid",
+        { id: "buyer-b", email: "buyer-b@example.invalid" },
       ),
-    /price changed/,
+    /priceChanged/,
   );
 }
 

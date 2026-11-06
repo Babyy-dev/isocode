@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { CarImage } from "./car-image";
 import { carCopy } from "../copy";
-import { carPath, formatPrice, type Language } from "../presentation";
+import { carPath, formatPrice } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 export function CatalogueHero({

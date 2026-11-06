@@ -1,10 +1,5 @@
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "./types";
-
-export type Language = "en" | "hi";
-
-export function getLanguage(value: string | string[] | undefined): Language {
-  return value === "hi" ? "hi" : "en";
-}
 
 export function carPath(car: Car, language: Language = "en"): string {
   const name = `${car.model}-${car.variant}${car.type === "Used" ? `-${car.year}` : ""}`;

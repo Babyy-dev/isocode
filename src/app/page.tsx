@@ -7,7 +7,7 @@ import {
 import { CarCatalogue } from "@/features/cars/components/car-catalogue";
 import { listCars, toCar } from "@/features/cars/repository";
 export const dynamic = "force-dynamic";
-import { getLanguage } from "@/features/cars/presentation";
+import { requestLanguage } from "@/lib/i18n/request-language";
 
 type HomePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -16,7 +16,7 @@ type HomePageProps = {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const cars = (await listCars()).map(toCar);
   const query = await searchParams;
-  const language = getLanguage(query.lang);
+  const language = await requestLanguage();
   const type =
     query.type === "New" || query.type === "Used" ? query.type : "All";
 

@@ -8,12 +8,16 @@ import { BookingError, validateBooking } from "./validation";
 import type { BookingDocument, BookingInput } from "./types";
 import { matchesRequest } from "./rules";
 import { acknowledgementMessage } from "@/features/messaging/templates";
+import type { Language } from "@/lib/i18n/language";
+
+type BookingOwner = { id: string; email: string };
 
 export async function createBooking(
   input: BookingInput,
-  buyerId: string,
-  buyerEmail: string,
+  owner: BookingOwner,
+  language: Language = "en",
 ) {
+  const buyerId = owner.id;
   validateBooking(input);
   const client = await connectMongo();
   const database = client.db(databaseName());
@@ -26,14 +30,12 @@ export async function createBooking(
           .findOne({ _id: input.requestId }, { session });
         if (existing) {
           if (existing.buyerId !== buyerId)
-            throw new BookingError("Reload the form and try again.");
+            throw new BookingError("reload");
           if (!matchesRequest(existing, input))
-            throw new BookingError(
-              "A previous request already reserved a different booking. Check My bookings before trying again.",
-            );
+            throw new BookingError("differentRequest");
           return existing._id;
         }
-        return reserveBooking(database, session, input, buyerId, buyerEmail);
+        return reserveBooking(database, session, input, owner, language);
       },
       { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } },
     );
@@ -43,9 +45,7 @@ export async function createBooking(
         .collection<BookingDocument>("bookings")
         .findOne({ _id: input.requestId, buyerId });
       if (existing && matchesRequest(existing, input)) return existing._id;
-      throw new BookingError(
-        "This slot was just reserved. Refresh the slots and choose another.",
-      );
+      throw new BookingError("slotTaken");
     }
     throw error;
   } finally {
@@ -57,18 +57,19 @@ async function reserveBooking(
   database: Db,
   session: ClientSession,
   input: BookingInput,
-  buyerId: string,
-  buyerEmail: string,
+  owner: BookingOwner,
+  language: Language,
 ) {
   validateBooking(input);
   const car = await lockAndCheckSlot(database, session, input);
   const price = await currentPrice(database, session, input);
   const consultant = await chooseConsultant(database, session, input);
-  const booking = makeBooking(input, buyerId, buyerEmail, consultant, price);
+  const booking = makeBooking(input, owner.id, owner.email, consultant, price);
   booking.messages.push(
     acknowledgementMessage(
       { ...input, carName: `${car.model} ${car.variant}`, consultant },
       booking.createdAt,
+      language,
     ),
   );
   await database
@@ -103,7 +104,7 @@ async function lockAndCheckSlot(
       { session },
     );
   if (occupied)
-    throw new BookingError("This slot was just reserved. Choose another.");
+    throw new BookingError("slotTaken");
   const car = await database
     .collection<CarDocument>("cars")
     .findOneAndUpdate(
@@ -111,7 +112,7 @@ async function lockAndCheckSlot(
       { $set: { updatedAt: new Date() } },
       { session, returnDocument: "after" },
     );
-  if (!car) throw new BookingError("This car is no longer available.");
+  if (!car) throw new BookingError("carUnavailable");
   return car;
 }
 
@@ -131,13 +132,9 @@ async function currentPrice(
       { session, sort: { version: -1 } },
     );
   if (createPriceQuote(price, new Date()).status !== "available" || !price)
-    throw new BookingError(
-      "The city price is unavailable or expired. Ask for an updated price.",
-    );
+    throw new BookingError("priceUnavailable");
   if (price.version !== input.priceVersion)
-    throw new BookingError(
-      "The price changed. Reload and review the new price before booking.",
-    );
+    throw new BookingError("priceChanged");
   return price;
 }
 
@@ -159,7 +156,7 @@ async function chooseConsultant(
     .toArray();
   const consultant = assignConsultant(leads, input.showroom, input.carId);
   if (!consultant)
-    throw new BookingError("No consultant is configured for this showroom.");
+    throw new BookingError("noConsultant");
   return consultant;
 }
 

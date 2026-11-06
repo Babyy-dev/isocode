@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { authClient } from "./client";
+import { authCopy } from "./copy";
+import type { Language } from "@/lib/i18n/language";
 
-export function SignOutButton() {
+export function SignOutButton({ language }: { language: Language }) {
+  const copy = authCopy[language];
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
 
@@ -17,7 +20,7 @@ export function SignOutButton() {
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/");
     } catch {
-      setError("Could not sign out. Please try again.");
+      setError(copy.signOutFailed);
       setPending(false);
     }
   }
@@ -25,7 +28,7 @@ export function SignOutButton() {
   return (
     <div>
       <button className="button-primary" disabled={pending} onClick={signOut}>
-        {pending ? "Signing out…" : "Sign out"}
+        {pending ? copy.signingOut : copy.signOut}
       </button>
       <p role="alert" className="mt-3 text-sm text-red-700">
         {error}

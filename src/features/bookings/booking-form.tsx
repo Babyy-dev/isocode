@@ -11,18 +11,23 @@ import { useRouter } from "next/navigation";
 import { demoShowrooms, demoTimes } from "@/features/demo/data";
 import { indiaDate } from "@/lib/date";
 import { formatPrice } from "@/features/cars/presentation";
+import type { Language } from "@/lib/i18n/language";
+import { bookingCopy } from "./copy";
 
 export function BookingForm({
   cars,
   prices,
   cities,
   slots,
+  language,
 }: {
   cars: Car[];
   prices: CityPrice[];
   cities: { _id: string; name: string }[];
   slots: OccupiedSlot[];
+  language: Language;
 }) {
+  const copy = bookingCopy[language];
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [requestId] = useState(() => crypto.randomUUID());
@@ -42,9 +47,9 @@ export function BookingForm({
 
   function submit(form: FormData) {
     if (!form.get("consent"))
-      return setMessage("Consent is required for booking and follow-up.");
+      return setMessage(copy.form.consentMissing);
     if (!price)
-      return setMessage("No current price is available for this car and city.");
+      return setMessage(copy.form.noPrice);
     startTransition(async () => {
       try {
         const result = await bookTestDrive({
@@ -68,7 +73,7 @@ export function BookingForm({
           setMessage("");
         }
       } catch {
-        setMessage("Unable to book. Check your connection and try again.");
+        setMessage(copy.form.network);
       }
     });
   }
@@ -76,26 +81,24 @@ export function BookingForm({
   if (confirmation)
     return (
       <section className="max-w-xl border border-line p-8">
-        <p className="eyebrow">TEST DRIVE CONFIRMED</p>
-        <h1 className="section-title mt-4">Your drive is on the calendar.</h1>
+        <p className="eyebrow">{copy.confirmed.eyebrow}</p>
+        <h1 className="section-title mt-4">{copy.confirmed.title}</h1>
         <p className="mt-6">
           {date} · {time} IST · {showroom}
         </p>
         <p className="mt-4 text-sm text-muted">
-          Reference {confirmation.slice(0, 8)}. Your lead is assigned to a named
-          consultant profile. Your slot is saved in this assessment app; no
-          external message was sent.
+          {copy.confirmed.text(confirmation.slice(0, 8))}
         </p>
         <Link className="button-primary mt-8" href="/bookings">
-          View my bookings ↗
+          {copy.confirmed.view} ↗
         </Link>
       </section>
     );
 
   return (
     <>
-      <p className="eyebrow">30 MINUTES. YOUR NEXT CAR.</p>
-      <h1 className="section-title mt-4">Book a test drive</h1>
+      <p className="eyebrow">{copy.form.eyebrow}</p>
+      <h1 className="section-title mt-4">{copy.form.title}</h1>
       <form
         action={submit}
         className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr]"
@@ -103,7 +106,7 @@ export function BookingForm({
         <fieldset disabled={pending} className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="field-label">
-              Car / demo resource
+              {copy.form.car}
               <select
                 className="field"
                 value={carId}
@@ -122,7 +125,7 @@ export function BookingForm({
               </select>
             </label>
             <label className="field-label">
-              Price city
+              {copy.form.city}
               <select
                 className="field"
                 value={city}
@@ -137,7 +140,7 @@ export function BookingForm({
             </label>
           </div>
           <label className="field-label">
-            Showroom
+            {copy.form.showroom}
             <select
               className="field"
               value={showroom}
@@ -152,7 +155,7 @@ export function BookingForm({
             </select>
           </label>
           <label className="field-label">
-            Date
+            {copy.form.date}
             <input
               className="field"
               type="date"
@@ -167,9 +170,7 @@ export function BookingForm({
             />
           </label>
           <fieldset>
-            <legend className="mb-3 text-sm">
-              Available slots · India time
-            </legend>
+            <legend className="mb-3 text-sm">{copy.form.slots}</legend>
             <div className="grid grid-cols-4 gap-2">
               {demoTimes.map((value) => (
                 <button
@@ -196,34 +197,31 @@ export function BookingForm({
             </div>
           </fieldset>
           <label className="field-label">
-            Demo buyer name
+            {copy.form.name}
             <input
               className="field"
               name="buyer"
               required
               maxLength={80}
-              placeholder="Use a fictional name"
+              placeholder={copy.form.namePlaceholder}
             />
           </label>
           <label className="field-label">
-            What matters to you?
+            {copy.form.needs}
             <textarea
               className="field min-h-28"
               name="needs"
               maxLength={1000}
-              placeholder="For example: automatic, family use, weekend availability"
+              placeholder={copy.form.needsPlaceholder}
             />
           </label>
           <label className="flex gap-3 text-sm leading-6">
-            <input className="mt-1" type="checkbox" name="consent" required />I
-            consent to using this fictional information for this demo booking
-            and follow-up. I can opt out from My bookings.
+            <input className="mt-1" type="checkbox" name="consent" required />
+            {copy.form.consent}
           </label>
           <label className="flex gap-3 text-sm leading-6">
             <input className="mt-1" type="checkbox" name="aiConsent" />
-            Optional: allow OpenAI to help staff summarise my stated needs and
-            draft a reply. Staff review the result. I can withdraw this
-            permission in My bookings; booking does not require it.
+            {copy.form.aiConsent}
           </label>
           <button
             disabled={
@@ -231,29 +229,26 @@ export function BookingForm({
             }
             className="button-primary disabled:opacity-40"
           >
-            {pending ? "Reserving…" : "Confirm test drive"}
+            {pending ? copy.form.submitting : copy.form.submit}
           </button>
           <p role="alert" className="text-sm text-red-700">
             {message}
           </p>
         </fieldset>
         <aside className="self-start bg-surface p-8">
-          <p className="eyebrow">YOUR PRICE SNAPSHOT</p>
+          <p className="eyebrow">{copy.snapshot.eyebrow}</p>
           <p className="mt-4 text-3xl">
             {price
               ? formatPrice(calculateOnRoadPrice(price) / 100)
-              : "Price unavailable"}
+              : copy.snapshot.unavailable}
           </p>
           <p className="mt-4 text-sm leading-6 text-muted">
-            Illustrative on-road price for{" "}
-            {cities.find((item) => item._id === city)?.name ?? city}. Valid
-            through {price?.validThrough ?? "—"}. Prices may change. Your
-            booking keeps a copy of this price.
+            {copy.snapshot.text(
+              cities.find((item) => item._id === city)?.name ?? city,
+              price?.validThrough ?? "—",
+            )}
           </p>
-          <p className="mt-6 text-xs leading-5">
-            Slots are reserved in MongoDB. Availability is checked again when
-            you confirm. Messages are simulated; no SMS or WhatsApp is sent.
-          </p>
+          <p className="mt-6 text-xs leading-5">{copy.snapshot.note}</p>
         </aside>
       </form>
     </>

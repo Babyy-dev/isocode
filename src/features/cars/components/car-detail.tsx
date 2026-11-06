@@ -3,7 +3,8 @@ import { CarGallery } from "./car-gallery";
 import { CarOverview } from "./car-overview";
 import { CarPricePanel } from "./car-price-panel";
 import { carCopy } from "../copy";
-import { formatPrice, type Language } from "../presentation";
+import { formatPrice } from "../presentation";
+import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
 
 import type { CityPrice } from "@/features/pricing/types";

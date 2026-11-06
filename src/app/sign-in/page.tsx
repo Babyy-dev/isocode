@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AuthForm } from "@/features/auth/auth-form";
 import { safeReturnTo } from "@/features/auth/access";
+import { requestLanguage } from "@/lib/i18n/request-language";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -13,5 +14,12 @@ export default async function SignInPage({
   searchParams: Promise<{ returnTo?: string }>;
 }) {
   const query = await searchParams;
-  return <AuthForm mode="sign-in" returnTo={safeReturnTo(query.returnTo)} />;
+  const language = await requestLanguage();
+  return (
+    <AuthForm
+      mode="sign-in"
+      returnTo={safeReturnTo(query.returnTo)}
+      language={language}
+    />
+  );
 }

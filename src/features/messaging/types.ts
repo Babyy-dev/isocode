@@ -14,4 +14,5 @@ export type LeadMessage = {
   sentBy: string;
 };
 
+/** Base id; the stored template adds the language, e.g. test_drive_ack_v1_hi. */
 export const ACKNOWLEDGEMENT_TEMPLATE = "test_drive_ack_v1";
