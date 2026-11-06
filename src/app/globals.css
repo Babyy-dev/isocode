@@ -52,6 +52,12 @@ select {
   letter-spacing: 0.2em;
 }
 
+/* Wide tracking pulls apart Devanagari conjuncts and matras; Hindi needs a little more size instead. */
+:lang(hi) .eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
 .section-title {
   font-size: clamp(1.9rem, 3.5vw, 2.65rem);
   line-height: 1.2;

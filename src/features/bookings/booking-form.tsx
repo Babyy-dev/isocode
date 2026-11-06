@@ -171,6 +171,7 @@ export function BookingForm({
           </label>
           <fieldset>
             <legend className="mb-3 text-sm">{copy.form.slots}</legend>
+            {!date && <p className="mb-3 text-xs text-muted">{copy.form.pickDate}</p>}
             <div className="grid grid-cols-4 gap-2">
               {demoTimes.map((value) => (
                 <button

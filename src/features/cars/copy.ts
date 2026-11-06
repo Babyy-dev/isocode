@@ -78,9 +78,6 @@ export const carCopy = {
     priceDisclaimer:
       "Prices may change. The displayed base price is from the supplied sample stock and is not a final on-road quote.",
     validity: "Quote validity",
-    bookingSoon: "Test-drive booking is coming next.",
-    bookingExplanation:
-      "Online slots are not connected yet. No booking is created on this page.",
     bookedExplanation:
       "This car is marked booked in the sample stock. Explore the collection for available cars.",
     seeAvailable: "Explore available cars",
@@ -89,8 +86,8 @@ export const carCopy = {
       "Photos, colour options and further specifications will be updated from verified vehicle records.",
     footerTitle: "Your next journey starts with a closer look.",
     footerText: "Company A · Authorised Brand X dealer · Lucknow",
-    demo: "Assignment preview",
-    footerNote: "Sample data. Online bookings and enquiries are not live yet.",
+    demo: "© Company A, Lucknow · Authorised Brand X dealer",
+    footerNote: "Demo with synthetic stock and prices. Messages are simulated.",
     skip: "Skip to content",
     notFoundTitle: "This car isn’t in the collection.",
     notFoundText: "It may have moved, or the address may be incorrect.",
@@ -172,9 +169,6 @@ export const carCopy = {
     priceDisclaimer:
       "कीमतें बदल सकती हैं। दिखाई गई मूल कीमत नमूना स्टॉक से है और अंतिम ऑन-रोड कोट नहीं है।",
     validity: "कोट की वैधता",
-    bookingSoon: "टेस्ट ड्राइव बुकिंग जल्द उपलब्ध होगी।",
-    bookingExplanation:
-      "ऑनलाइन स्लॉट अभी जुड़े नहीं हैं। इस पेज से बुकिंग नहीं होती।",
     bookedExplanation:
       "नमूना स्टॉक में यह कार बुक हो चुकी है। उपलब्ध कारों के लिए अन्य विकल्प देखें।",
     seeAvailable: "उपलब्ध कारें देखें",
@@ -183,8 +177,8 @@ export const carCopy = {
       "सत्यापित रिकॉर्ड मिलने पर तस्वीरें, रंग और अन्य विशेषताएँ अपडेट की जाएँगी।",
     footerTitle: "आपका अगला सफ़र, एक नई शुरुआत।",
     footerText: "Company A · अधिकृत Brand X डीलर · लखनऊ",
-    demo: "असाइनमेंट प्रीव्यू",
-    footerNote: "नमूना डेटा। ऑनलाइन बुकिंग और पूछताछ अभी चालू नहीं हैं।",
+    demo: "© Company A, लखनऊ · अधिकृत Brand X डीलर",
+    footerNote: "काल्पनिक स्टॉक और कीमतों वाला डेमो। संदेश सिम्युलेटेड हैं।",
     skip: "मुख्य सामग्री पर जाएँ",
     notFoundTitle: "यह कार सूची में नहीं है।",
     notFoundText: "पता गलत हो सकता है या कार हटा दी गई है।",

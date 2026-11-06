@@ -2,10 +2,25 @@ import Link from "next/link";
 import { layoutCopy } from "@/components/layout/copy";
 import { LanguageToggle } from "@/components/layout/language-toggle";
 import { requestLanguage } from "@/lib/i18n/request-language";
+import { getSession } from "@/features/auth/session";
+import { canAccess, type UserRole } from "@/features/auth/access";
+
+type NavLink = { href: string; label: keyof (typeof layoutCopy)["en"]["nav"]; roles: UserRole[] };
+
+const everyone: UserRole[] = ["buyer", "consultant", "admin"];
+const navLinks: NavLink[] = [
+  { href: "/account", label: "account", roles: everyone },
+  { href: "/book", label: "testDrive", roles: everyone },
+  { href: "/bookings", label: "bookings", roles: everyone },
+  { href: "/leads", label: "leads", roles: ["consultant", "admin"] },
+  { href: "/admin", label: "admin", roles: ["admin"] },
+];
 
 export async function PreviewShell({ children }: { children: React.ReactNode }) {
-  const language = await requestLanguage();
+  const [language, session] = await Promise.all([requestLanguage(), getSession()]);
   const copy = layoutCopy[language];
+  // Signed-out visitors are redirected by each page; show them only the buyer links meanwhile.
+  const links = navLinks.filter((link) => canAccess(session?.user.role, link.roles));
   return (
     <>
       <header className="border-b border-line">
@@ -14,11 +29,11 @@ export async function PreviewShell({ children }: { children: React.ReactNode }) 
             <Link className="font-bold" href="/">
               COMPANY A
             </Link>
-            <Link href="/account">{copy.nav.account}</Link>
-            <Link href="/book">{copy.nav.testDrive}</Link>
-            <Link href="/bookings">{copy.nav.bookings}</Link>
-            <Link href="/leads">{copy.nav.leads}</Link>
-            <Link href="/admin">{copy.nav.admin}</Link>
+            {links.map((link) => (
+              <Link key={link.href} href={link.href}>
+                {copy.nav[link.label]}
+              </Link>
+            ))}
           </nav>
           <LanguageToggle language={language} />
         </div>
