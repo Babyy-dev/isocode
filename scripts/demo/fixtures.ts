@@ -25,6 +25,18 @@ export const demoAccounts: DemoAccount[] = [
     role: "consultant",
     profile: "Consultant 2A",
   },
+  {
+    email: "consultant3@demo.companya.test",
+    name: "Demo Consultant Three",
+    role: "consultant",
+    profile: "Consultant 1B",
+  },
+  {
+    email: "consultant4@demo.companya.test",
+    name: "Demo Consultant Four",
+    role: "consultant",
+    profile: "Consultant 2B",
+  },
   { email: "admin@demo.companya.test", name: "Demo Admin", role: "admin" },
 ];
 
