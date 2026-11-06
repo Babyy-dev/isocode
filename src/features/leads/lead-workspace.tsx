@@ -6,8 +6,16 @@ import { useEffect, useState, useTransition } from "react";
 import type { Booking } from "@/features/bookings/types";
 import { LeadDetail } from "./lead-detail";
 import { useLeadViewStore } from "@/stores/lead-view-store";
+import { responseLabel, responseState } from "./response-time";
 
-export function LeadWorkspace({ bookings }: { bookings: Booking[] }) {
+export function LeadWorkspace({
+  bookings,
+  renderedAt,
+}: {
+  bookings: Booking[];
+  /** Server time of this render, so timers are correct before the first tick. */
+  renderedAt: number;
+}) {
   const router = useRouter();
   const [refreshing, startRefresh] = useTransition();
   const {
@@ -16,13 +24,13 @@ export function LeadWorkspace({ bookings }: { bookings: Booking[] }) {
     select: setSelected,
     searchFor: setSearch,
   } = useLeadViewStore();
-  const [now, setNow] = useState(0);
+  const [now, setNow] = useState(renderedAt);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, []);
   const visible = bookings.filter((lead) =>
-    `${lead.buyer} ${lead.consultant} ${lead.carId}`
+    `${lead.buyer} ${lead.consultant} ${lead.carName} ${lead.carId}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
@@ -66,13 +74,9 @@ export function LeadWorkspace({ bookings }: { bookings: Booking[] }) {
                   <span className="text-xs">{item.leadStatus}</span>
                 </div>
                 <p className="mt-2 text-sm text-muted">
-                  {item.carId} · {item.consultant}
+                  {item.carName} · {item.consultant}
                 </p>
-                <p
-                  className={`mt-3 text-xs ${!item.contactedAt && now - item.createdAt > 300000 ? "text-red-700" : "text-accent"}`}
-                >
-                  {responseLabel(item, now)}
-                </p>
+                <ResponseTimer lead={item} now={now} />
               </button>
             ))}
           </div>
@@ -92,10 +96,14 @@ export function LeadWorkspace({ bookings }: { bookings: Booking[] }) {
   );
 }
 
-function responseLabel(lead: Booking, now: number): string {
-  const seconds = Math.max(
-    0,
-    Math.floor(((lead.contactedAt ?? now) - lead.createdAt) / 1000),
-  );
-  return `${lead.contactedAt ? "First contact" : "Awaiting contact"}: ${Math.floor(seconds / 60)}m ${seconds % 60}s · target 5m`;
+const timerTone = {
+  waiting: "text-accent",
+  overdue: "font-medium text-red-700",
+  met: "text-muted",
+  missed: "text-muted",
+} as const;
+
+function ResponseTimer({ lead, now }: { lead: Booking; now: number }) {
+  const state = responseState(lead, now);
+  return <p className={`mt-3 text-xs ${timerTone[state.kind]}`}>{responseLabel(state)}</p>;
 }

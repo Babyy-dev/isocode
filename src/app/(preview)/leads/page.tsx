@@ -14,5 +14,6 @@ export default async function LeadsPage() {
         </p>
       </section>
     );
-  return <LeadWorkspace bookings={await listLeads(actor)} />;
+  const { leads, fetchedAt } = await listLeads(actor);
+  return <LeadWorkspace bookings={leads} renderedAt={fetchedAt} />;
 }

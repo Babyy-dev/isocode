@@ -1,7 +1,7 @@
 import "server-only";
 import { requireRole } from "@/features/auth/session";
 import { getDatabase } from "@/lib/database";
-import { bookingView } from "@/features/bookings/queries";
+import { bookingView, carNamesFor } from "@/features/bookings/queries";
 import type { BookingDocument } from "@/features/bookings/types";
 import { leadScope, type LeadActor } from "./access";
 
@@ -27,5 +27,10 @@ export async function listLeads(actor: LeadActor) {
     .find(leadScope(actor))
     .sort({ createdAt: -1 })
     .toArray();
-  return records.map((record) => bookingView(record, true));
+  // The read time seeds the inbox's live response timers.
+  const names = await carNamesFor(records);
+  return {
+    leads: records.map((record) => bookingView(record, names, true)),
+    fetchedAt: Date.now(),
+  };
 }

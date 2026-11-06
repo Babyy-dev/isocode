@@ -45,7 +45,8 @@ export function LeadDetail({ lead }: { lead: Booking }) {
           Account email: {lead.buyerEmail}
         </p>
         <p className="mt-2 text-sm text-muted">
-          {lead.showroom} · {lead.date} {lead.time} IST · {lead.status}
+          {lead.carName} · {lead.showroom} · {lead.date} {lead.time} IST ·{" "}
+          {lead.status}
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">

@@ -22,6 +22,8 @@ export type Booking = {
   ai?: SavedAssistance;
   id: string;
   carId: string;
+  /** Display name, e.g. "Model H ZX automatic"; read from the car record, not stored. */
+  carName: string;
   showroom: string;
   date: string;
   time: string;
@@ -38,7 +40,7 @@ export type Booking = {
   messages: LeadMessage[];
 };
 
-export type BookingDocument = Omit<Booking, "id"> & {
+export type BookingDocument = Omit<Booking, "id" | "carName"> & {
   _id: string;
   buyerId: string;
   consentAt: number;

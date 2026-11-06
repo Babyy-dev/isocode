@@ -54,7 +54,7 @@ export function BuyerBookings({
           <article key={booking.id} className="border border-line p-6">
             <p className="eyebrow">{copy.status[booking.status]}</p>
             <h2 className="mt-3 text-xl">
-              {booking.carId} · {booking.buyer}
+              {booking.carName}
             </h2>
             <p className="mt-3 text-sm">
               {booking.date} · {booking.time} IST
