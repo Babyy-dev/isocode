@@ -12,7 +12,7 @@ export function CarGallery({ car }: { car: Car }) {
     : car;
   return (
     <>
-      <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-surface sm:aspect-[2.2/1]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-surface shadow-card ring-1 ring-line/60 sm:aspect-[2.2/1]">
         <CarImage
           car={shown}
           priority

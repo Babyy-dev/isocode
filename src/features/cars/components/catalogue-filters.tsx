@@ -13,7 +13,7 @@ export function CatalogueFilters({
   onChange,
 }: CatalogueFiltersProps) {
   return (
-    <div className="my-7 grid gap-4 rounded-sm border border-line bg-page p-5 md:grid-cols-[2fr_1fr_1fr]">
+    <div className="my-7 grid gap-4 rounded-2xl border border-line bg-page p-5 shadow-card md:grid-cols-[2fr_1fr_1fr]">
       <label className="field-label">
         {copy.search}
         <input
@@ -77,7 +77,7 @@ export function CatalogueTabs({
           type="button"
           aria-pressed={selectedType === type}
           onClick={() => onChange(type)}
-          className={`min-h-11 rounded-sm px-6 py-3 text-sm font-medium transition-colors ${selectedType === type ? "bg-ink text-page" : "bg-surface text-muted hover:bg-line"}`}
+          className={`min-h-11 rounded-full border px-6 py-3 text-sm font-medium transition-colors ${selectedType === type ? "border-ink bg-ink text-page" : "border-line bg-surface text-muted hover:border-accent/40 hover:text-ink"}`}
         >
           {type === "All"
             ? copy.allCars

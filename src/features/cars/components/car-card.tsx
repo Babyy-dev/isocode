@@ -9,7 +9,7 @@ export function CarCard({ car, language }: { car: Car; language: Language }) {
   const copy = carCopy[language];
 
   return (
-    <article className="group overflow-hidden rounded-sm border border-line bg-page transition-shadow hover:shadow-lg hover:shadow-ink/5">
+    <article className="group overflow-hidden rounded-2xl border border-line bg-page shadow-card transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-card-hover">
       <Link
         href={carPath(car)}
         className="relative block aspect-[4/3] overflow-hidden bg-surface"
@@ -19,10 +19,10 @@ export function CarCard({ car, language }: { car: Car; language: Language }) {
           car={car}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <span className="absolute top-4 left-4 bg-page/95 px-3 py-1.5 text-[11px] font-medium">
+        <span className="absolute top-4 left-4 rounded-full border border-line/60 bg-page/85 px-3 py-1.5 text-[11px] font-medium backdrop-blur-sm">
           {car.type === "New" ? copy.newCars : copy.usedCars}
         </span>
-        <span className="absolute right-3 bottom-3 rounded bg-black/50 px-2 py-1 text-[9px] text-white">
+        <span className="absolute right-3 bottom-3 rounded-full bg-black/55 px-2.5 py-1 text-[9px] text-white backdrop-blur-sm">
           {copy.imageNote}
         </span>
       </Link>

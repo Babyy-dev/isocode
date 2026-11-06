@@ -52,7 +52,7 @@ export function AuthForm({ mode, returnTo, language }: AuthFormProps) {
 
   return (
     <main id="main-content" className="page-container flex justify-center py-16">
-      <section className="w-full max-w-md">
+      <section className="w-full max-w-md rounded-3xl border border-line bg-page p-8 shadow-card sm:p-10">
         <h1 className="section-title">
           {isSignUp ? copy.signUpTitle : copy.signInTitle}
         </h1>

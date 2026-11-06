@@ -6,7 +6,7 @@ export function SiteFooter({ language }: { language: Language }) {
   const copy = carCopy[language];
 
   return (
-    <footer className="mt-24 border-t border-line bg-surface">
+    <footer className="mt-24 rounded-t-[2.5rem] border-t border-line bg-surface">
       <div className="page-container py-12">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>

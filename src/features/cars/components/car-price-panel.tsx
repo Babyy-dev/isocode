@@ -56,7 +56,7 @@ export function CarPricePanel({
   return (
     <aside
       id="pricing"
-      className="scroll-mt-8 self-start border border-line p-7 lg:sticky lg:top-8"
+      className="scroll-mt-8 self-start rounded-2xl border border-line bg-page p-7 shadow-card lg:sticky lg:top-24"
     >
       <p className="eyebrow">{labels.demo}</p>
       <h2 className="mt-4 text-2xl font-medium">{copy.priceTitle}</h2>

@@ -85,7 +85,7 @@ function EmptyCatalogue({
   reset: () => void;
 }) {
   return (
-    <div className="border border-dashed border-line px-6 py-16 text-center">
+    <div className="rounded-2xl border border-dashed border-line bg-surface/40 px-6 py-16 text-center">
       <h3 className="text-xl font-medium">{copy.noResults}</h3>
       <p className="mt-3 text-sm text-muted">{copy.noResultsDescription}</p>
       <button className="button-primary mt-6" type="button" onClick={reset}>

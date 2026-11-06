@@ -35,10 +35,10 @@ export function CatalogueHero({
           {copy.location}
         </p>
       </div>
-      <div className="group relative isolate min-h-[380px] overflow-hidden rounded-sm bg-surface sm:min-h-[480px]">
+      <div className="group relative isolate min-h-[380px] overflow-hidden rounded-3xl bg-surface shadow-card ring-1 ring-line/60 sm:min-h-[480px]">
         <CarImage car={car} priority sizes="(max-width: 1024px) 100vw, 55vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10" />
-        <span className="absolute top-6 left-6 border border-white/50 bg-black/15 px-3 py-2 text-[10px] tracking-[0.2em] text-white">
+        <span className="absolute top-6 left-6 rounded-full border border-white/40 bg-black/25 px-3.5 py-2 text-[10px] tracking-[0.2em] text-white backdrop-blur-sm">
           {copy.featured}
         </span>
         <div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-9">
@@ -77,18 +77,21 @@ export function ShowroomHighlights({ language }: { language: Language }) {
   ];
 
   return (
-    <div className="border-y border-line bg-surface/60">
-      <div className="page-container grid gap-6 py-7 sm:grid-cols-3">
-        {highlights.map(([title, description], index) => (
-          <div key={title} className="flex gap-4">
-            <span className="pt-1 text-xs text-muted/70">0{index + 1}</span>
-            <div>
-              <p className="text-sm font-medium">{title}</p>
-              <p className="mt-1 text-xs text-muted">{description}</p>
-            </div>
+    <div className="page-container grid gap-4 pb-4 sm:grid-cols-3">
+      {highlights.map(([title, description], index) => (
+        <div
+          key={title}
+          className="flex gap-4 rounded-2xl border border-line bg-surface/50 p-5 transition-colors hover:border-accent/30 hover:bg-surface"
+        >
+          <span className="text-sm font-semibold text-accent/80">
+            0{index + 1}
+          </span>
+          <div>
+            <p className="text-sm font-medium">{title}</p>
+            <p className="mt-1 text-xs leading-5 text-muted">{description}</p>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
