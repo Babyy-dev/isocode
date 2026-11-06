@@ -9,6 +9,7 @@ import { carCopy } from "../copy";
 import { formatPrice } from "../presentation";
 import type { Language } from "@/lib/i18n/language";
 import type { Car } from "../types";
+import { EmiCalculator } from "@/features/finance/components/emi-calculator";
 
 export function CarPricePanel({
   car,
@@ -95,6 +96,13 @@ export function CarPricePanel({
           <dd>{price?.validThrough ?? "—"}</dd>
         </div>
       </dl>
+      {price && !expired && (
+        <EmiCalculator
+          key={`${city}-${price.version}`}
+          onRoadPrice={calculateOnRoadPrice(price) / 100}
+          language={language}
+        />
+      )}
       <p className="mt-6 text-xs leading-6 text-muted">
         {copy.priceDisclaimer}
       </p>
