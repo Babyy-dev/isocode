@@ -6,17 +6,29 @@ import { MobileMenu, type MenuLink } from "./mobile-menu";
 import { ProfileMenu, type HeaderUser } from "./profile-menu";
 import { ThemeToggle } from "./theme-toggle";
 import { carCopy } from "@/features/cars/copy";
+import { normalizeRole } from "@/features/auth/access";
 import { getSession } from "@/features/auth/session";
 import type { Language } from "@/lib/i18n/language";
 
 type SiteHeaderProps = { language: Language };
 
+/** The one site-wide header, rendered by the root layout on every page. */
 export async function SiteHeader({ language }: SiteHeaderProps) {
   const copy = carCopy[language];
   const nav = layoutCopy[language].nav;
   const session = await getSession();
+  const role = normalizeRole(session?.user.role);
+  // Account links depend on the role; pages still enforce access on the server.
   const user: HeaderUser | null = session?.user
-    ? { name: session.user.name }
+    ? {
+        name: session.user.name,
+        links: [
+          { href: "/account", label: nav.myAccount },
+          { href: "/bookings", label: nav.bookings },
+          ...(role !== "buyer" ? [{ href: "/leads", label: nav.leads }] : []),
+          ...(role === "admin" ? [{ href: "/admin", label: nav.admin }] : []),
+        ],
+      }
     : null;
   const links: MenuLink[] = [
     { href: "/?type=New#collection", label: copy.newCars },

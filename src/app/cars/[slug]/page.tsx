@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { CarDetail } from "@/features/cars/components/car-detail";
 import { listCars, listCities, toCar } from "@/features/cars/repository";
@@ -48,7 +47,6 @@ export default async function CarPage({ params }: CarPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(carJsonLd(car)) }}
       />
-      <SiteHeader language={language} />
       <CarDetail
         car={car}
         language={language}

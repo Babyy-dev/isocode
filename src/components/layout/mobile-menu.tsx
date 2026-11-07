@@ -98,13 +98,16 @@ export function MobileMenu({
                   <span className="font-semibold text-ink">{user.name}</span>
                 </p>
                 <div className="grid grid-cols-2 gap-3">
-                  <Link
-                    href="/account"
-                    onClick={() => setOpen(false)}
-                    className="flex min-h-11 items-center justify-center rounded-xl border border-line text-sm hover:border-accent"
-                  >
-                    {copy.nav.myAccount}
-                  </Link>
+                  {user.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="flex min-h-11 items-center justify-center rounded-xl border border-line px-2 text-center text-sm hover:border-accent"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                   <button
                     type="button"
                     disabled={signingOut}

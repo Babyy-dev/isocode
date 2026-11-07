@@ -5,7 +5,6 @@ import { normalizeRole } from "@/features/auth/access";
 import { SignOutButton } from "@/features/auth/sign-out-button";
 import { authCopy } from "@/features/auth/copy";
 import { requestLanguage } from "@/lib/i18n/request-language";
-import { SiteHeader } from "@/components/layout/site-header";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -26,7 +25,6 @@ export default async function AccountPage({
 
   return (
     <>
-      <SiteHeader language={language} />
       <main id="main-content" className="page-container py-16">
         <h1 className="section-title">{copy.title(session.user.name)}</h1>
         <p className="mt-4 text-muted">

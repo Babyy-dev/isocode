@@ -27,8 +27,8 @@ export function CatalogueSkeleton() {
 
 function CarCardSkeleton() {
   return (
-    <div className="border border-line">
-      <Skeleton className="aspect-[4/3]" />
+    <div className="overflow-hidden rounded-2xl border border-line">
+      <Skeleton className="aspect-[4/3] rounded-none" />
       <div className="space-y-4 p-6">
         <Skeleton className="h-7 w-1/2" />
         <Skeleton className="h-4 w-2/3" />

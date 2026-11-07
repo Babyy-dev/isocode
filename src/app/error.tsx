@@ -2,7 +2,7 @@
 
 export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
-    <main className="page-container py-24">
+    <main id="main-content" className="page-container py-24">
       <h1 className="section-title">Something went wrong.</h1>
       <p className="mt-4 text-muted">
         We couldn’t load this page. Please try again.

@@ -6,7 +6,11 @@ import type { Language } from "@/lib/i18n/language";
 import { authClient } from "@/features/auth/client";
 import { layoutCopy } from "./copy";
 
-export type HeaderUser = { name: string };
+export type HeaderUser = {
+  name: string;
+  /** Role-aware destinations (My account, My bookings, Lead inbox, Admin). */
+  links: { href: string; label: string }[];
+};
 
 /**
  * Account entry point for the desktop header: a profile icon that opens a small menu.
@@ -107,18 +111,25 @@ export function ProfileMenu({
                 <span className="profile-head-label">{nav.signedInAs}</span>
                 <span className="profile-head-name">{user.name}</span>
               </span>
-              <Link
-                href="/account"
-                role="menuitem"
-                className="profile-item"
-                onClick={() => setOpen(false)}
-              >
-                <GearIcon />
-                <span>
-                  {nav.myAccount}
-                  <span className="profile-item-hint">{nav.accountHint}</span>
-                </span>
-              </Link>
+              {user.links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  role="menuitem"
+                  className="profile-item"
+                  onClick={() => setOpen(false)}
+                >
+                  {link.href === "/account" ? <GearIcon /> : <ArrowIcon />}
+                  {link.href === "/account" ? (
+                    <span>
+                      {link.label}
+                      <span className="profile-item-hint">{nav.accountHint}</span>
+                    </span>
+                  ) : (
+                    link.label
+                  )}
+                </Link>
+              ))}
               <button
                 type="button"
                 role="menuitem"

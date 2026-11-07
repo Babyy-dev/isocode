@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import {
   CatalogueHero,
@@ -34,7 +33,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <div lang={language}>
-      <SiteHeader language={language} />
       <main id="main-content">
         {cars[0] && <CatalogueHero car={cars[0]} language={language} />}
         <ShowroomHighlights language={language} />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SiteHeader } from "@/components/layout/site-header";
 import { requestLanguage } from "@/lib/i18n/request-language";
 import { siteUrl } from "@/lib/site";
 import { requestTheme } from "@/lib/theme/request-theme";
@@ -20,7 +21,11 @@ export default async function RootLayout({
   const [language, theme] = await Promise.all([requestLanguage(), requestTheme()]);
   return (
     <html lang={language} data-theme={theme}>
-      <body>{children}</body>
+      <body>
+        {/* One navbar for every page, including 404 and loading states. */}
+        <SiteHeader language={language} />
+        {children}
+      </body>
     </html>
   );
 }
