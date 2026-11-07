@@ -2,6 +2,7 @@ import Link from "next/link";
 import { layoutCopy } from "@/components/layout/copy";
 import { LanguageToggle } from "@/components/layout/language-toggle";
 import { MobileMenu, type MenuLink } from "@/components/layout/mobile-menu";
+import type { HeaderUser } from "@/components/layout/profile-menu";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { requestLanguage } from "@/lib/i18n/request-language";
 import { getSession } from "@/features/auth/session";
@@ -25,6 +26,9 @@ export async function PreviewShell({ children }: { children: React.ReactNode }) 
   const links: MenuLink[] = navLinks
     .filter((link) => canAccess(session?.user.role, link.roles))
     .map((link) => ({ href: link.href, label: copy.nav[link.label] }));
+  const user: HeaderUser | null = session?.user
+    ? { name: session.user.name }
+    : null;
   return (
     <>
       <header className="relative border-b border-line bg-page">
@@ -43,7 +47,7 @@ export async function PreviewShell({ children }: { children: React.ReactNode }) 
             <ThemeToggle language={language} />
             <LanguageToggle language={language} />
           </div>
-          <MobileMenu links={links} language={language} />
+          <MobileMenu links={links} language={language} user={user} />
         </div>
       </header>
       <div className="bg-accent px-6 py-3 text-center text-xs leading-5 text-on-accent">
