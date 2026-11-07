@@ -11,3 +11,5 @@ next-env.d.ts
 
 # Local notes and submission files (kept out of the repository)
 /docs/
+# Regenerated at the root by `next dev`
+/AGENTS.md
