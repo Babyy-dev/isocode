@@ -7,15 +7,16 @@ Use English, or Hindi if the buyer's needs are primarily in Hindi. Address the b
 List missing or ambiguous facts as uncertainties. If needs are empty or ambiguous, state that and ask one useful clarifying question.
 Return a summary (under 1200 characters), draft (under 2000 characters), and up to 6 short uncertainty notes. Human review is always required. Never add a confidence score.`;
 
+/** Gemini response schema (OpenAPI subset); output is still validated by parseAssistance. */
 export const assistanceSchema = {
-  type: "object",
-  additionalProperties: false,
+  type: "OBJECT",
   properties: {
-    summary: { type: "string" },
-    draft: { type: "string" },
-    uncertainties: { type: "array", items: { type: "string" } },
+    summary: { type: "STRING" },
+    draft: { type: "STRING" },
+    uncertainties: { type: "ARRAY", items: { type: "STRING" }, maxItems: 6 },
   },
   required: ["summary", "draft", "uncertainties"],
+  propertyOrdering: ["summary", "draft", "uncertainties"],
 } as const;
 
 export function redactContactDetails(needs: string) {

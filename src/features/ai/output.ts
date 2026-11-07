@@ -45,29 +45,27 @@ export function parseAssistance(text: string): BuyerAssistance {
   };
 }
 
+type GeminiResponse = {
+  promptFeedback?: { blockReason?: string };
+  candidates?: { finishReason?: string; content?: { parts?: { text?: string; thought?: boolean }[] } }[];
+};
+
+/** Pulls the JSON text out of a Gemini generateContent response, or explains why there is none. */
 export function extractResponseText(body: unknown): string {
-  if (!body || typeof body !== "object")
-    throw new AiError("AI returned an invalid response.");
-  const response = body as {
-    status?: string;
-    output?: { type?: string; content?: { type?: string; text?: string }[] }[];
-  };
-  if (response.status !== "completed" || !Array.isArray(response.output))
-    throw new AiError(
-      "AI could not finish this request. Try again or write a manual reply.",
-    );
-  const content = response.output
-    .filter((item) => item.type === "message")
-    .flatMap((item) => (Array.isArray(item.content) ? item.content : []));
-  if (content.some((item) => item.type === "refusal"))
-    throw new AiError(
-      "AI declined this request. Review the original needs and write a manual reply.",
-    );
-  const text = content
-    .filter((item) => item.type === "output_text")
-    .map((item) => item.text ?? "")
+  if (!body || typeof body !== "object") throw new AiError("AI returned an invalid response.");
+  const response = body as GeminiResponse;
+  if (response.promptFeedback?.blockReason)
+    throw new AiError("AI declined this request. Review the original needs and write a manual reply.");
+  const candidate = response.candidates?.[0];
+  if (!candidate) throw new AiError("AI returned no answer. Try again or write a manual reply.");
+  if (candidate.finishReason === "SAFETY" || candidate.finishReason === "PROHIBITED_CONTENT")
+    throw new AiError("AI declined this request. Review the original needs and write a manual reply.");
+  if (candidate.finishReason && candidate.finishReason !== "STOP")
+    throw new AiError("AI could not finish this request. Try again or write a manual reply.");
+  const text = (candidate.content?.parts ?? [])
+    .filter((part) => !part.thought)
+    .map((part) => part.text ?? "")
     .join("");
-  if (!text || text.length > 12000)
-    throw new AiError("AI response was empty or too long.");
+  if (!text || text.length > 12000) throw new AiError("AI response was empty or too long.");
   return text;
 }

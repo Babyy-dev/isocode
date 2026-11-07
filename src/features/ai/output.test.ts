@@ -40,27 +40,30 @@ test("AI and manual replies reject pricing and discount language", () => {
     ),
   );
 });
-test("Responses API refusal, incomplete and empty output are handled explicitly", () => {
+test("Gemini blocked, unfinished and empty answers are handled explicitly", () => {
   const response = {
-    status: "completed",
-    output: [
-      {
-        type: "message",
-        content: [{ type: "output_text", text: JSON.stringify(valid) }],
-      },
+    candidates: [
+      { finishReason: "STOP", content: { parts: [{ text: JSON.stringify(valid) }] } },
     ],
   };
   assert.deepEqual(parseAssistance(extractResponseText(response)), valid);
-  assert.throws(() =>
-    extractResponseText({ ...response, status: "incomplete" }),
-  );
-  assert.throws(() =>
-    extractResponseText({
-      status: "completed",
-      output: [{ type: "message", content: [{ type: "refusal" }] }],
-    }),
-  );
-  assert.throws(() => extractResponseText({ status: "completed", output: [] }));
+  const withThought = {
+    candidates: [
+      {
+        finishReason: "STOP",
+        content: { parts: [{ text: "reasoning…", thought: true }, { text: JSON.stringify(valid) }] },
+      },
+    ],
+  };
+  assert.deepEqual(parseAssistance(extractResponseText(withThought)), valid);
+  for (const bad of [
+    { promptFeedback: { blockReason: "SAFETY" } },
+    { candidates: [] },
+    { candidates: [{ ...response.candidates[0], finishReason: "SAFETY" }] },
+    { candidates: [{ ...response.candidates[0], finishReason: "MAX_TOKENS" }] },
+    { candidates: [{ finishReason: "STOP", content: { parts: [] } }] },
+  ])
+    assert.throws(() => extractResponseText(bad), JSON.stringify(bad));
 });
 test("common email addresses and Indian phone numbers are removed from needs", () => {
   const redacted = redactContactDetails(

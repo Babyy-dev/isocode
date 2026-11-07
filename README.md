@@ -169,17 +169,17 @@ Admins can add, edit, archive and restore cars; edit descriptions, colours/speci
 
 Photo URLs load directly in the browser with no referrer; the server does not proxy arbitrary hosts. Use compressed, licensed HTTPS images. Unknown/broken images show a placeholder. Image-host availability and performance are not guaranteed by the app. The seed adds labelled synthetic detail fields only if missing, preserving admin edits. Used-car owner counts, masked registrations and inspection text added by the seed are assumptions for the assessment, not client-supplied facts or real certifications.
 
-## OpenAI setup and review
+## Gemini (AI) setup and review
 
-Add `OPENAI_API_KEY` and `OPENAI_MODEL` to the ignored root `.env`. The approved starting model is `gpt-4.1-mini`. Never prefix the key with `NEXT_PUBLIC_`, commit it, or paste it into chat. Restart the app after changing environment variables.
+Create a key in [Google AI Studio](https://aistudio.google.com/apikey) and add `GEMINI_API_KEY` and `GEMINI_MODEL` (starting model: `gemini-2.5-flash`) to the ignored root `.env`. Never prefix the key with `NEXT_PUBLIC_`, commit it, or paste it into chat. Restart the app after changing environment variables.
 
 ```sh
 npm run ai:check
 ```
 
-This makes three real requests using synthetic normal, empty and adversarial needs. It requires an API key, model access and available API quota. It was attempted without credentials and correctly returned the unavailable message; real generation has not been verified.
+This makes three real requests using synthetic normal, empty and adversarial needs, and fails if any draft contains price or discount language.
 
-The app uses the [Responses API structured-output format](https://developers.openai.com/api/docs/guides/structured-outputs?api-mode=responses) and the [approved configurable model](https://developers.openai.com/api/docs/models/gpt-4.1-mini). Generation is protected by lead assignment checks, optional buyer AI consent, active booking/follow-up permission, and a separate 5-attempt/10-minute fixed-window limit per staff account. Provider calls have a 20-second timeout, bounded output, and no automatic retries. Requests use `store: false`; this does not promise zero provider retention.
+The app calls the Gemini `generateContent` REST endpoint with a JSON response schema. Generation is protected by lead assignment checks, optional buyer AI consent, active booking/follow-up permission, and a separate 5-attempt/10-minute fixed-window limit per staff account. Provider calls have a 20-second timeout, bounded output, and no automatic retries. Note: on Google AI Studio's free tier, Google may use prompts to improve its products; a paid (billing-enabled) key is needed before real buyer data is sent.
 
 Only stated needs, car model and language are sent. Name/email/price-table fields are omitted; common email/Indian phone patterns in free text are redacted, but other identifying text can remain. The prompt treats buyer content as untrusted data. Parsed output must match the expected summary/draft/uncertainties shape. Refusals, incomplete output, malformed data, timeout, credentials and quota errors keep manual replies available. Recognised commercial-price/discount phrases are blocked, but semantic accuracy still requires review.
 

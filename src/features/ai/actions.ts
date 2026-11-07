@@ -9,6 +9,7 @@ import type { BookingDocument } from "@/features/bookings/types";
 import type { CarDocument } from "@/lib/mongodb/documents";
 import { generateAssistance, aiConfiguration } from "./provider";
 import { AiError } from "./types";
+import { isUuid } from "@/lib/ids";
 
 export async function generateBuyerAssistance(
   id: string,
@@ -16,8 +17,7 @@ export async function generateBuyerAssistance(
 ) {
   const actor = await requireLeadActor();
   if (
-    typeof id !== "string" ||
-    !/^[a-f0-9-]{36}$/.test(id) ||
+    !isUuid(id) ||
     !["en", "hi"].includes(language)
   )
     return { error: "Invalid AI request." };
@@ -97,8 +97,7 @@ export async function saveReviewedSummary(
   if (
     !Number.isSafeInteger(generatedAt) ||
     generatedAt < 1 ||
-    typeof id !== "string" ||
-    !/^[a-f0-9-]{36}$/.test(id) ||
+    !isUuid(id) ||
     typeof summary !== "string" ||
     !summary.trim() ||
     summary.length > 1200
