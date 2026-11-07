@@ -42,6 +42,10 @@ export const demoAccounts: DemoAccount[] = [
 
 export const DEMO_BUYER_EMAIL = "buyer@demo.companya.test";
 
+/** Fixed UUIDs (the app only accepts UUID booking ids), recognisable by the zero prefix. */
+export const DEMO_LEAD_ID_PREFIX = "00000000-0000-4000-8000-";
+const demoLeadId = (n: number) => `${DEMO_LEAD_ID_PREFIX}${String(n).padStart(12, "0")}`;
+
 export type DemoLead = {
   id: string;
   carId: string;
@@ -65,7 +69,7 @@ export type DemoLead = {
 
 export const demoLeads: DemoLead[] = [
   {
-    id: "demo-lead-01",
+    id: demoLeadId(1),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 1",
     consultant: "Consultant 1A",
@@ -80,7 +84,7 @@ export const demoLeads: DemoLead[] = [
     ownedByDemoBuyer: true,
   },
   {
-    id: "demo-lead-02",
+    id: demoLeadId(2),
     carId: "UC-1182",
     showroom: "Demo Showroom 1",
     consultant: "Consultant 1A",
@@ -94,7 +98,7 @@ export const demoLeads: DemoLead[] = [
     time: "14:30",
   },
   {
-    id: "demo-lead-03",
+    id: demoLeadId(3),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 1",
     consultant: "Consultant 1A",
@@ -109,7 +113,7 @@ export const demoLeads: DemoLead[] = [
     tradeIn: { model: "Model A hatchback", year: 2018, kilometres: 64_000, owners: 1 },
   },
   {
-    id: "demo-lead-04",
+    id: demoLeadId(4),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 1",
     consultant: "Consultant 1A",
@@ -122,7 +126,7 @@ export const demoLeads: DemoLead[] = [
     time: "15:00",
   },
   {
-    id: "demo-lead-05",
+    id: demoLeadId(5),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 2",
     consultant: "Consultant 2A",
@@ -136,7 +140,7 @@ export const demoLeads: DemoLead[] = [
     time: "10:00",
   },
   {
-    id: "demo-lead-06",
+    id: demoLeadId(6),
     carId: "UC-1182",
     showroom: "Demo Showroom 2",
     consultant: "Consultant 2A",
@@ -150,7 +154,7 @@ export const demoLeads: DemoLead[] = [
     optedOut: true,
   },
   {
-    id: "demo-lead-07",
+    id: demoLeadId(7),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 2",
     consultant: "Consultant 2A",
@@ -163,7 +167,7 @@ export const demoLeads: DemoLead[] = [
     time: "14:00",
   },
   {
-    id: "demo-lead-08",
+    id: demoLeadId(8),
     carId: "NEW-H-02",
     showroom: "Demo Showroom 3",
     consultant: "Consultant 3A",

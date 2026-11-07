@@ -10,6 +10,7 @@ import type { BookingInput } from "./types";
 import { bookingErrorText } from "./copy";
 import { requestLanguage } from "@/lib/i18n/request-language";
 import type { Language } from "@/lib/i18n/language";
+import { isUuid } from "@/lib/ids";
 
 export async function bookTestDrive(input: BookingInput) {
   const session = await requireSession("/book");
@@ -31,8 +32,7 @@ export async function updateBuyerBooking(
   const session = await requireSession("/bookings");
   const language = await requestLanguage();
   if (
-    typeof id !== "string" ||
-    !/^[a-f0-9-]{36}$/.test(id) ||
+    !isUuid(id) ||
     !["cancel", "opt-out", "opt-in", "ai-opt-in", "ai-opt-out"].includes(action)
   )
     return { error: bookingErrorText("invalidRequest", language) };

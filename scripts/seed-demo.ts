@@ -4,7 +4,7 @@ import { resetDemoLeads } from "./demo/leads";
 import { DEMO_BUYER_EMAIL, demoAccounts, demoLeads } from "./demo/fixtures";
 
 // Reviewer accounts and a populated lead inbox. Safe to re-run: accounts are reused,
-// demo leads (ids "demo-lead-*") are reset; no other records are touched.
+// demo leads (fixed ids, see DEMO_LEAD_ID_PREFIX) are reset; no other records are touched.
 void runDatabaseTask(async (database) => {
   const ids = await ensureDemoAccounts(database, demoAccounts);
   const buyerId = ids.get(DEMO_BUYER_EMAIL)!;

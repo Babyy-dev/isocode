@@ -3,6 +3,7 @@ import { endOfIndiaDate } from "@/features/pricing/validate-price";
 import type { BookingInput } from "./types";
 import type { BookingErrorCode } from "./copy";
 import { validateTradeIn } from "@/features/trade-in/validate-trade-in";
+import { isUuid } from "@/lib/ids";
 
 /** Carries a message key; the action translates it into the visitor's language. */
 export class BookingError extends Error {
@@ -21,11 +22,7 @@ export function validateBooking(input: BookingInput, now = Date.now()) {
     throw new BookingError("aiConsentChoice");
   if (input.consent !== true)
     throw new BookingError("consentRequired");
-  if (
-    typeof input.requestId !== "string" ||
-    !/^[a-f0-9-]{36}$/.test(input.requestId)
-  )
-    throw new BookingError("reload");
+  if (!isUuid(input.requestId)) throw new BookingError("reload");
   if (
     typeof input.carId !== "string" ||
     !/^[\w-]{1,80}$/.test(input.carId) ||

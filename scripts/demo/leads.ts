@@ -13,6 +13,8 @@ type Buyer = { id: string; email: string };
 /** Replaces each demo lead by its fixed id, so re-running resets the demo inbox. */
 export async function resetDemoLeads(database: Db, leads: DemoLead[], buyer: Buyer) {
   const bookings = database.collection<BookingDocument>("bookings");
+  // Earlier seeds used non-UUID ids ("demo-lead-01") that the app's actions reject.
+  await bookings.deleteMany({ _id: { $regex: "^demo-lead-" } });
   const now = Date.now();
   for (const lead of leads) {
     const price = await priceSnapshot(database, lead.carId);
@@ -25,7 +27,8 @@ export async function resetDemoLeads(database: Db, leads: DemoLead[], buyer: Buy
 
 /** An owner id that matches no account, standing in for a buyer who enquired elsewhere. */
 function syntheticBuyer(leadId: string): Buyer {
-  return { id: `synthetic-${leadId}`, email: `${leadId}@demo.companya.test` };
+  const n = Number(leadId.slice(-2));
+  return { id: `synthetic-buyer-${n}`, email: `enquiry${n}@demo.companya.test` };
 }
 
 async function findCarName(database: Db, carId: string) {
