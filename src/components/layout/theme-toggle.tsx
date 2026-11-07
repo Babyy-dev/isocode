@@ -33,7 +33,7 @@ export function ThemeToggle({
       onClick={toggleTheme}
       aria-label={copy.label}
       title={copy.label}
-      className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded border border-line px-3 text-sm hover:border-accent ${className}`}
+      className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl border border-line px-3 text-sm transition-colors hover:border-accent ${className}`}
     >
       <span className="theme-icon-moon inline-flex items-center gap-2">
         <MoonIcon />

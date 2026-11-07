@@ -37,7 +37,7 @@ export function LanguageToggle({ language, className = "" }: { language: Languag
       aria-busy={pending}
       aria-label={copy.switchLabel}
       lang={pending ? language : next}
-      className={`min-h-11 rounded border border-line px-3 py-2 text-sm hover:border-accent disabled:cursor-wait disabled:opacity-60 ${className}`}
+      className={`min-h-11 rounded-xl border border-line px-3 py-2 text-sm transition-colors hover:border-accent disabled:cursor-wait disabled:opacity-60 ${className}`}
     >
       {pending ? copy.switching : copy.switchTo}
     </button>
