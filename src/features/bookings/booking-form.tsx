@@ -13,6 +13,8 @@ import { indiaDate } from "@/lib/date";
 import { formatPrice } from "@/features/cars/presentation";
 import type { Language } from "@/lib/i18n/language";
 import { bookingCopy } from "./copy";
+import { TradeInFields } from "@/features/trade-in/components/trade-in-fields";
+import { readTradeInForm } from "@/features/trade-in/form";
 
 export function BookingForm({
   cars,
@@ -64,6 +66,7 @@ export function BookingForm({
           needs: String(form.get("needs")),
           consent: form.get("consent") === "on",
           aiConsent: form.get("aiConsent") === "on",
+          tradeIn: readTradeInForm(form),
         });
         if (result.error) {
           setMessage(result.error);
@@ -216,6 +219,7 @@ export function BookingForm({
               placeholder={copy.form.needsPlaceholder}
             />
           </label>
+          <TradeInFields language={language} />
           <label className="flex gap-3 text-sm leading-6">
             <input className="mt-1" type="checkbox" name="consent" required />
             {copy.form.consent}

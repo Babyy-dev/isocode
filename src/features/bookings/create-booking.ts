@@ -4,7 +4,7 @@ import { connectMongo, databaseName } from "@/lib/mongodb/client";
 import type { CarDocument, CityPriceDocument } from "@/lib/mongodb/documents";
 import { createPriceQuote } from "@/features/pricing/calculate-price";
 import { assignConsultant } from "@/features/leads/assignment";
-import { BookingError, validateBooking } from "./validation";
+import { BookingError, bookingTradeIn, validateBooking } from "./validation";
 import type { BookingDocument, BookingInput } from "./types";
 import { matchesRequest } from "./rules";
 import { acknowledgementMessage } from "@/features/messaging/templates";
@@ -184,6 +184,7 @@ function makeBooking(
     contactedAt: null,
     leadStatus: "New",
     optedOut: false,
+    tradeIn: bookingTradeIn(input),
     aiConsent: input.aiConsent === true,
     aiConsentAt: input.aiConsent === true ? now : null,
     consentAt: now,

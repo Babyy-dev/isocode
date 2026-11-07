@@ -2,6 +2,7 @@ import { demoShowrooms, demoTimes } from "@/features/demo/data";
 import { endOfIndiaDate } from "@/features/pricing/validate-price";
 import type { BookingInput } from "./types";
 import type { BookingErrorCode } from "./copy";
+import { validateTradeIn } from "@/features/trade-in/validate-trade-in";
 
 /** Carries a message key; the action translates it into the visitor's language. */
 export class BookingError extends Error {
@@ -54,4 +55,14 @@ export function validateBooking(input: BookingInput, now = Date.now()) {
     input.needs.length > 1000
   )
     throw new BookingError("nameNeeds");
+  bookingTradeIn(input);
+}
+
+/** The validated trade-in for this booking, or null when none was offered. */
+export function bookingTradeIn(input: BookingInput) {
+  try {
+    return validateTradeIn(input.tradeIn);
+  } catch {
+    throw new BookingError("tradeIn");
+  }
 }

@@ -12,6 +12,7 @@ export type BookingErrorCode =
   | "validDate"
   | "futureSlot"
   | "nameNeeds"
+  | "tradeIn"
   | "differentRequest"
   | "slotTaken"
   | "carUnavailable"
@@ -35,6 +36,7 @@ const errorsEn: Record<BookingErrorCode, string> = {
   validDate: "Choose a valid date.",
   futureSlot: "Choose a future slot.",
   nameNeeds: "Check your name and preferences (up to 1,000 characters).",
+  tradeIn: "Complete your trade-in car: model, year, kilometres and number of owners.",
   differentRequest:
     "A previous request already reserved a different booking. Check My bookings before trying again.",
   slotTaken: "This slot was just reserved. Choose another.",
@@ -60,6 +62,7 @@ const errorsHi: Record<BookingErrorCode, string> = {
   validDate: "मान्य तारीख चुनें।",
   futureSlot: "आगे का कोई स्लॉट चुनें।",
   nameNeeds: "अपना नाम और ज़रूरतें जाँचें (अधिकतम 1,000 अक्षर)।",
+  tradeIn: "अपनी ट्रेड-इन कार की जानकारी पूरी करें: मॉडल, वर्ष, किलोमीटर और मालिकों की संख्या।",
   differentRequest:
     "पिछले अनुरोध से दूसरी बुकिंग पहले ही हो चुकी है। दोबारा कोशिश से पहले मेरी बुकिंग देखें।",
   slotTaken: "यह स्लॉट अभी-अभी बुक हो गया। कोई दूसरा चुनें।",

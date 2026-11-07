@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { MessageTimeline } from "@/features/messaging/components/message-timeline";
+import { TradeInSummary } from "@/features/trade-in/components/trade-in-summary";
 import { demoConsultants } from "@/features/demo/data";
 import type { Booking } from "@/features/bookings/types";
 import { changeLead } from "./actions";
@@ -48,6 +49,7 @@ export function LeadDetail({ lead }: { lead: Booking }) {
           {lead.carName} · {lead.showroom} · {lead.date} {lead.time} IST ·{" "}
           {lead.status}
         </p>
+        <TradeInSummary tradeIn={lead.tradeIn} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="field-label">

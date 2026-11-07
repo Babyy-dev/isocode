@@ -30,6 +30,7 @@ export function bookingView(
     optedOut: record.optedOut,
     price: record.price,
     messages: record.messages,
+    tradeIn: record.tradeIn ?? null,
   };
 }
 

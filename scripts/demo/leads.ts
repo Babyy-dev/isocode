@@ -77,6 +77,7 @@ function toBooking({ lead, owner, price, carName }: BookingParts, now: number): 
     contactedAt,
     leadStatus: lead.leadStatus,
     optedOut: lead.optedOut === true,
+    tradeIn: lead.tradeIn ?? null,
     aiConsent: true,
     aiConsentAt: createdAt,
     consentAt: createdAt,

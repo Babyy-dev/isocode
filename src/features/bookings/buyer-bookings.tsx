@@ -9,6 +9,7 @@ import { MessageTimeline } from "@/features/messaging/components/message-timelin
 import { formatPrice } from "@/features/cars/presentation";
 import type { Language } from "@/lib/i18n/language";
 import { bookingCopy } from "./copy";
+import { TradeInSummary } from "@/features/trade-in/components/trade-in-summary";
 
 export function BuyerBookings({
   bookings,
@@ -66,6 +67,7 @@ export function BuyerBookings({
               {copy.snapshot}:{" "}
               {formatPrice(calculateOnRoadPrice(booking.price) / 100)}
             </p>
+            <TradeInSummary tradeIn={booking.tradeIn} language={language} />
             <div className="mt-6 flex flex-wrap gap-5">
               {booking.status === "Confirmed" && (
                 <button

@@ -1,6 +1,7 @@
 import type { CityPrice } from "@/features/pricing/types";
 import type { SavedAssistance } from "@/features/ai/types";
 import type { LeadMessage } from "@/features/messaging/types";
+import type { TradeIn } from "@/features/trade-in/types";
 
 export type BookingInput = {
   requestId: string;
@@ -14,6 +15,7 @@ export type BookingInput = {
   needs: string;
   consent: boolean;
   aiConsent?: boolean;
+  tradeIn?: TradeIn | null;
 };
 
 export type Booking = {
@@ -38,9 +40,12 @@ export type Booking = {
   optedOut: boolean;
   price: CityPrice;
   messages: LeadMessage[];
+  tradeIn: TradeIn | null;
 };
 
-export type BookingDocument = Omit<Booking, "id" | "carName"> & {
+export type BookingDocument = Omit<Booking, "id" | "carName" | "tradeIn"> & {
+  /** Absent on bookings made before trade-ins existed. */
+  tradeIn?: TradeIn | null;
   _id: string;
   buyerId: string;
   consentAt: number;

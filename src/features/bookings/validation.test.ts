@@ -19,6 +19,16 @@ const input: BookingInput = {
 };
 const now = Date.parse("2027-01-01T00:00:00Z");
 
+test("trade-in is optional, but an offered one must be complete", () => {
+  assert.doesNotThrow(() => validateBooking({ ...input, tradeIn: null }, now));
+  const tradeIn = { model: "Model A hatchback", year: 2018, kilometres: 64000, owners: 1 };
+  assert.doesNotThrow(() => validateBooking({ ...input, tradeIn }, now));
+  assert.throws(
+    () => validateBooking({ ...input, tradeIn: { ...tradeIn, owners: 0 } }, now),
+    (error: { code?: string }) => error.code === "tradeIn",
+  );
+});
+
 test("retry matching cannot confirm a different slot under the same request ID", () => {
   const saved = {
     ...input,

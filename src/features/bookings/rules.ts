@@ -1,4 +1,5 @@
 import type { BookingDocument, BookingInput } from "./types";
+import { bookingTradeIn } from "./validation";
 
 export function matchesRequest(booking: BookingDocument, input: BookingInput) {
   return (
@@ -10,6 +11,7 @@ export function matchesRequest(booking: BookingDocument, input: BookingInput) {
     booking.date === input.date &&
     booking.time === input.time &&
     booking.buyer === input.buyer.trim() &&
-    booking.needs === input.needs.trim()
+    booking.needs === input.needs.trim() &&
+    JSON.stringify(booking.tradeIn ?? null) === JSON.stringify(bookingTradeIn(input))
   );
 }

@@ -58,6 +58,7 @@ export type DemoLead = {
   inDays: number;
   time: string;
   optedOut?: boolean;
+  tradeIn?: { model: string; year: number; kilometres: number; owners: number };
   /** True for the one booking the reviewer's buyer login owns; others belong to synthetic buyers who cannot sign in. */
   ownedByDemoBuyer?: boolean;
 };
@@ -105,6 +106,7 @@ export const demoLeads: DemoLead[] = [
     leadStatus: "Contacted",
     inDays: 4,
     time: "10:30",
+    tradeIn: { model: "Model A hatchback", year: 2018, kilometres: 64_000, owners: 1 },
   },
   {
     id: "demo-lead-04",

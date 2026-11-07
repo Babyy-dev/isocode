@@ -52,6 +52,25 @@ const optionalCarFields = {
     },
   },
 };
+const optionalBookingFields = {
+  tradeIn: {
+    bsonType: ["null", "object"],
+    required: ["model", "year", "kilometres", "owners"],
+    properties: {
+      model: { ...string, maxLength: 60 },
+      year: { ...amount, minimum: 1995 },
+      kilometres: { ...amount, maximum: 500000 },
+      owners: { ...amount, minimum: 1, maximum: 9 },
+    },
+  },
+};
+
+/** Fields that may be missing from a document; every other listed field is required. */
+const optionalFields: Record<string, Document> = {
+  cars: optionalCarFields,
+  bookings: optionalBookingFields,
+};
+
 const schemas = {
   cars: {
     ...optionalCarFields,
@@ -74,6 +93,7 @@ const schemas = {
   bookingRateLimits: { _id: string, count: amount, expiresAt: date },
   aiRateLimits: { _id: string, count: amount, expiresAt: date },
   bookings: {
+    ...optionalBookingFields,
     _id: string,
     buyerId: string,
     carId: string,
@@ -156,7 +176,7 @@ async function ensureCollection(
     $jsonSchema: {
       bsonType: "object",
       required: Object.keys(properties).filter(
-        (key) => name !== "cars" || !(key in optionalCarFields),
+        (key) => !(key in (optionalFields[name] ?? {})),
       ),
       properties,
     },
