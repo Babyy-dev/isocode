@@ -115,7 +115,15 @@ const schemas = {
       bsonType: "array",
       items: {
         bsonType: "object",
-        required: ["kind", "channel", "template", "body", "status", "sentAt", "sentBy"],
+        required: [
+          "kind",
+          "channel",
+          "template",
+          "body",
+          "status",
+          "sentAt",
+          "sentBy",
+        ],
         properties: {
           kind: { enum: ["acknowledgement", "reply"] },
           channel: { enum: ["WhatsApp", "SMS"] },

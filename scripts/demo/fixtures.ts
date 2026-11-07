@@ -44,7 +44,8 @@ export const DEMO_BUYER_EMAIL = "buyer@demo.companya.test";
 
 /** Fixed UUIDs (the app only accepts UUID booking ids), recognisable by the zero prefix. */
 export const DEMO_LEAD_ID_PREFIX = "00000000-0000-4000-8000-";
-const demoLeadId = (n: number) => `${DEMO_LEAD_ID_PREFIX}${String(n).padStart(12, "0")}`;
+const demoLeadId = (n: number) =>
+  `${DEMO_LEAD_ID_PREFIX}${String(n).padStart(12, "0")}`;
 
 export type DemoLead = {
   id: string;
@@ -110,7 +111,12 @@ export const demoLeads: DemoLead[] = [
     leadStatus: "Contacted",
     inDays: 4,
     time: "10:30",
-    tradeIn: { model: "Model A hatchback", year: 2018, kilometres: 64_000, owners: 1 },
+    tradeIn: {
+      model: "Model A hatchback",
+      year: 2018,
+      kilometres: 64_000,
+      owners: 1,
+    },
   },
   {
     id: demoLeadId(4),
@@ -145,7 +151,8 @@ export const demoLeads: DemoLead[] = [
     showroom: "Demo Showroom 2",
     consultant: "Consultant 2A",
     buyer: "Sana Fatima",
-    needs: "Wants a used diesel under 9 lakh. Asked not to be contacted again after the first call.",
+    needs:
+      "Wants a used diesel under 9 lakh. Asked not to be contacted again after the first call.",
     ageMinutes: 26 * 60,
     contactedAfterMinutes: 5,
     leadStatus: "Contacted",
@@ -159,7 +166,8 @@ export const demoLeads: DemoLead[] = [
     showroom: "Demo Showroom 2",
     consultant: "Consultant 2A",
     buyer: "Vikas Yadav",
-    needs: "Comparing prices with another brand; decided to wait for a later model year.",
+    needs:
+      "Comparing prices with another brand; decided to wait for a later model year.",
     ageMinutes: 4 * 24 * 60,
     contactedAfterMinutes: 12,
     leadStatus: "Lost",

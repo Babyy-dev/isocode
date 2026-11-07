@@ -60,15 +60,13 @@ function input(): BookingInput {
 
 async function seedFixture(database: Db) {
   const car = sampleCars[0];
-  await database
-    .collection<CarDocument>("cars")
-    .insertOne({
-      ...car,
-      _id: car.stockId,
-      pricePaise: car.priceInRupees * 100,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  await database.collection<CarDocument>("cars").insertOne({
+    ...car,
+    _id: car.stockId,
+    pricePaise: car.priceInRupees * 100,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
   await database
     .collection<CityDocument>("cities")
     .insertOne({ _id: "lucknow", name: "Lucknow" });
@@ -93,7 +91,10 @@ async function checkReservations(database: Db) {
   const attempts = [first, { ...first, requestId: randomUUID() }];
   const results = await Promise.allSettled(
     attempts.map((request) =>
-      createBooking(request, { id: "buyer-a", email: "buyer-a@example.invalid" }),
+      createBooking(request, {
+        id: "buyer-a",
+        email: "buyer-a@example.invalid",
+      }),
     ),
   );
   assert.equal(
@@ -104,7 +105,10 @@ async function checkReservations(database: Db) {
   const winningInput =
     attempts[results.findIndex((result) => result.status === "fulfilled")];
   assert.equal(
-    await createBooking(winningInput, { id: "buyer-a", email: "buyer-a@example.invalid" }),
+    await createBooking(winningInput, {
+      id: "buyer-a",
+      email: "buyer-a@example.invalid",
+    }),
     winningInput.requestId,
   );
   assert.equal((await buyerBookings("buyer-b")).length, 0);

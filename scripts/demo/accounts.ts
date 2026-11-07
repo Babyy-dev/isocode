@@ -4,7 +4,10 @@ import type { ConsultantLink } from "../../src/features/leads/repository";
 import { DEMO_PASSWORD, type DemoAccount } from "./fixtures";
 
 /** Creates (or reuses) each account, then applies its role and consultant link. Returns email → user id. */
-export async function ensureDemoAccounts(database: Db, accounts: DemoAccount[]) {
+export async function ensureDemoAccounts(
+  database: Db,
+  accounts: DemoAccount[],
+) {
   const ids = new Map<string, string>();
   for (const account of accounts) {
     const userId = await ensureUser(database, account);
@@ -25,7 +28,8 @@ async function ensureUser(database: Db, account: DemoAccount) {
     body: { email: account.email, password: DEMO_PASSWORD, name: account.name },
   });
   const created = await findUser(database, account.email);
-  if (!created) throw new Error(`Demo account was not created: ${account.email}`);
+  if (!created)
+    throw new Error(`Demo account was not created: ${account.email}`);
   return created;
 }
 
@@ -37,11 +41,19 @@ async function findUser(database: Db, email: string) {
 }
 
 /** Role and display name are reset on every run so the demo stays predictable. */
-async function applyProfile(database: Db, userId: ObjectId, account: DemoAccount) {
-  await database.collection<{ _id: ObjectId }>("user").updateOne(
-    { _id: userId },
-    { $set: { role: account.role, name: account.name, updatedAt: new Date() } },
-  );
+async function applyProfile(
+  database: Db,
+  userId: ObjectId,
+  account: DemoAccount,
+) {
+  await database
+    .collection<{ _id: ObjectId }>("user")
+    .updateOne(
+      { _id: userId },
+      {
+        $set: { role: account.role, name: account.name, updatedAt: new Date() },
+      },
+    );
 }
 
 async function linkProfile(database: Db, userId: string, profile: string) {

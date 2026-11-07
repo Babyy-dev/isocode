@@ -25,9 +25,11 @@ if (
       .collection("consultantLinks")
       .createIndex({ profile: 1 }, { unique: true });
     await database
-      .collection<{ _id: string; profile: string; updatedAt: Date }>(
-        "consultantLinks",
-      )
+      .collection<{
+        _id: string;
+        profile: string;
+        updatedAt: Date;
+      }>("consultantLinks")
       .updateOne(
         { _id: user._id.toString() },
         { $set: { profile, updatedAt: new Date() } },

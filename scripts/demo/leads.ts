@@ -1,7 +1,10 @@
 import type { Db } from "mongodb";
 import type { BookingDocument } from "../../src/features/bookings/types";
 import type { CityPrice } from "../../src/features/pricing/types";
-import type { CarDocument, CityPriceDocument } from "../../src/lib/mongodb/documents";
+import type {
+  CarDocument,
+  CityPriceDocument,
+} from "../../src/lib/mongodb/documents";
 import { acknowledgementMessage } from "../../src/features/messaging/templates";
 import { DEMO_CITY_ID, type DemoLead } from "./fixtures";
 
@@ -11,7 +14,11 @@ const IST_OFFSET_MS = 330 * MINUTE;
 type Buyer = { id: string; email: string };
 
 /** Replaces each demo lead by its fixed id, so re-running resets the demo inbox. */
-export async function resetDemoLeads(database: Db, leads: DemoLead[], buyer: Buyer) {
+export async function resetDemoLeads(
+  database: Db,
+  leads: DemoLead[],
+  buyer: Buyer,
+) {
   const bookings = database.collection<BookingDocument>("bookings");
   // Earlier seeds used non-UUID ids ("demo-lead-01") that the app's actions reject.
   await bookings.deleteMany({ _id: { $regex: "^demo-lead-" } });
@@ -28,12 +35,18 @@ export async function resetDemoLeads(database: Db, leads: DemoLead[], buyer: Buy
 /** An owner id that matches no account, standing in for a buyer who enquired elsewhere. */
 function syntheticBuyer(leadId: string): Buyer {
   const n = Number(leadId.slice(-2));
-  return { id: `synthetic-buyer-${n}`, email: `enquiry${n}@demo.companya.test` };
+  return {
+    id: `synthetic-buyer-${n}`,
+    email: `enquiry${n}@demo.companya.test`,
+  };
 }
 
 async function findCarName(database: Db, carId: string) {
-  const car = await database.collection<CarDocument>("cars").findOne({ _id: carId });
-  if (!car) throw new Error(`Car ${carId} is missing. Run npm run db:seed first.`);
+  const car = await database
+    .collection<CarDocument>("cars")
+    .findOne({ _id: carId });
+  if (!car)
+    throw new Error(`Car ${carId} is missing. Run npm run db:seed first.`);
   return `${car.model} ${car.variant}`;
 }
 
@@ -42,7 +55,9 @@ async function priceSnapshot(database: Db, carId: string): Promise<CityPrice> {
     .collection<CityPriceDocument>("cityPrices")
     .findOne({ carId, cityId: DEMO_CITY_ID }, { sort: { version: -1 } });
   if (!price)
-    throw new Error(`No ${DEMO_CITY_ID} price for ${carId}. Run npm run db:seed first.`);
+    throw new Error(
+      `No ${DEMO_CITY_ID} price for ${carId}. Run npm run db:seed first.`,
+    );
   return {
     carId,
     cityId: DEMO_CITY_ID,
@@ -55,9 +70,17 @@ async function priceSnapshot(database: Db, carId: string): Promise<CityPrice> {
   };
 }
 
-type BookingParts = { lead: DemoLead; owner: Buyer; price: CityPrice; carName: string };
+type BookingParts = {
+  lead: DemoLead;
+  owner: Buyer;
+  price: CityPrice;
+  carName: string;
+};
 
-function toBooking({ lead, owner, price, carName }: BookingParts, now: number): BookingDocument {
+function toBooking(
+  { lead, owner, price, carName }: BookingParts,
+  now: number,
+): BookingDocument {
   const createdAt = now - lead.ageMinutes * MINUTE;
   const date = indiaDate(now + lead.inDays * 24 * 60 * MINUTE);
   const contactedAt =
