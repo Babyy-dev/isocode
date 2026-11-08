@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- A sedan in white on the site's blue accent; readable at 16 px on light and dark tab bars. -->
+  <rect width="32" height="32" rx="7" fill="#183e78" />
+  <path fill="#ffffff" d="M3 20V17.8Q3 15.9 5 15.5L9.5 14.6 13 11.2Q13.8 10.4 15 10.4H20.2Q21.3 10.4 22.1 11.1L25.6 14.4 27.4 14.9Q29 15.4 29 17.3V20Q29 21.2 27.8 21.2H4.2Q3 21.2 3 20Z" />
+  <path fill="#183e78" d="M11.8 14.3 13.9 12Q14.4 11.6 15 11.6H17.4V14.3ZM18.4 11.6H20Q20.7 11.6 21.2 12.1L23.3 14.3H18.4Z" />
+  <circle cx="8.6" cy="21.2" r="3.1" fill="#ffffff" stroke="#183e78" stroke-width="1.6" />
+  <circle cx="23.4" cy="21.2" r="3.1" fill="#ffffff" stroke="#183e78" stroke-width="1.6" />
+</svg>
