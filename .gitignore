@@ -10,8 +10,4 @@ next-env.d.ts
 *.log
 
 # Local notes and submission files (kept out of the repository)
-/info.md
-/milestone.md
-/AGENTS.md
-/public/credits.md
-/submission/
+/docs/
