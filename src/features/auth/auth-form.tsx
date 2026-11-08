@@ -6,7 +6,6 @@ import { authClient } from "./client";
 import { safeReturnTo } from "./access";
 import { authErrorMessage } from "./error-message";
 import { authCopy } from "./copy";
-import { LanguageToggle } from "@/components/layout/language-toggle";
 import type { Language } from "@/lib/i18n/language";
 
 type AuthFormProps = {
@@ -52,15 +51,9 @@ export function AuthForm({ mode, returnTo, language }: AuthFormProps) {
   }
 
   return (
-    <main className="page-container flex min-h-screen items-center justify-center py-12">
+    <main id="main-content" className="page-container flex justify-center py-16">
       <section className="w-full max-w-md">
-        <div className="flex items-center justify-between gap-4">
-          <Link className="eyebrow" href="/">
-            COMPANY A · BRAND X
-          </Link>
-          <LanguageToggle language={language} />
-        </div>
-        <h1 className="section-title mt-6">
+        <h1 className="section-title">
           {isSignUp ? copy.signUpTitle : copy.signInTitle}
         </h1>
         <p className="mt-4 text-sm leading-6 text-muted">

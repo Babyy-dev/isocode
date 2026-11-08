@@ -5,7 +5,7 @@ import { normalizeRole } from "@/features/auth/access";
 import { SignOutButton } from "@/features/auth/sign-out-button";
 import { authCopy } from "@/features/auth/copy";
 import { requestLanguage } from "@/lib/i18n/request-language";
-import { LanguageToggle } from "@/components/layout/language-toggle";
+import { SiteHeader } from "@/components/layout/site-header";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -25,30 +25,27 @@ export default async function AccountPage({
   const copy = authCopy[language].account;
 
   return (
-    <main className="page-container py-16">
-      <div className="flex items-center justify-between gap-4">
-        <Link href="/" className="eyebrow">
-          COMPANY A · HOME
-        </Link>
-        <LanguageToggle language={language} />
-      </div>
-      <h1 className="section-title mt-6">{copy.title(session.user.name)}</h1>
-      <p className="mt-4 text-muted">
-        {session.user.email} · {copy.roles[role]}
-      </p>
-      {query.access === "denied" && (
-        <p role="alert" className="mt-6 text-red-700">
-          {copy.denied}
+    <>
+      <SiteHeader language={language} />
+      <main id="main-content" className="page-container py-16">
+        <h1 className="section-title">{copy.title(session.user.name)}</h1>
+        <p className="mt-4 text-muted">
+          {session.user.email} · {copy.roles[role]}
         </p>
-      )}
-      <nav className="my-10 flex flex-wrap gap-6 text-accent">
-        <Link href="/book">{copy.book} ↗</Link>
-        <Link href="/bookings">{copy.bookings} ↗</Link>
-        {role !== "buyer" && <Link href="/leads">{copy.leads} ↗</Link>}
-        {role === "admin" && <Link href="/admin">{copy.admin} ↗</Link>}
-      </nav>
-      <p className="mb-8 max-w-xl text-sm leading-6 text-muted">{copy.note}</p>
-      <SignOutButton language={language} />
-    </main>
+        {query.access === "denied" && (
+          <p role="alert" className="mt-6 text-red-700">
+            {copy.denied}
+          </p>
+        )}
+        <nav className="my-10 flex flex-wrap gap-6 text-accent">
+          <Link href="/book">{copy.book} ↗</Link>
+          <Link href="/bookings">{copy.bookings} ↗</Link>
+          {role !== "buyer" && <Link href="/leads">{copy.leads} ↗</Link>}
+          {role === "admin" && <Link href="/admin">{copy.admin} ↗</Link>}
+        </nav>
+        <p className="mb-8 max-w-xl text-sm leading-6 text-muted">{copy.note}</p>
+        <SignOutButton language={language} />
+      </main>
+    </>
   );
 }
