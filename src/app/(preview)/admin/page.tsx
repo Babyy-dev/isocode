@@ -2,6 +2,7 @@ import { requireRole } from "@/features/auth/session";
 import { AdminWorkspace } from "@/features/admin/admin-workspace";
 import { listCars, listCities, toCar } from "@/features/cars/repository";
 import { listCityPrices } from "@/features/pricing/repository";
+import { DmsExportCard } from "@/features/dms-export/components/dms-export-card";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
@@ -12,6 +13,9 @@ export default async function AdminPage() {
     listCityPrices(),
   ]);
   return (
-    <AdminWorkspace cars={cars.map(toCar)} cities={cities} prices={prices} />
+    <>
+      <AdminWorkspace cars={cars.map(toCar)} cities={cities} prices={prices} />
+      <DmsExportCard />
+    </>
   );
 }
