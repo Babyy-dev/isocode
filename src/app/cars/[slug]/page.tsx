@@ -5,9 +5,11 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CarDetail } from "@/features/cars/components/car-detail";
 import { listCars, listCities, toCar } from "@/features/cars/repository";
 import { listCityPrices } from "@/features/pricing/repository";
-export const dynamic = "force-dynamic";
 import { carPath } from "@/features/cars/presentation";
+import { carJsonLd, carMetadata, jsonLdScript } from "@/features/cars/seo";
 import { requestLanguage } from "@/lib/i18n/request-language";
+
+export const dynamic = "force-dynamic";
 
 type CarPageProps = {
   params: Promise<{ slug: string }>;
@@ -25,11 +27,7 @@ export async function generateMetadata({
   const car = await findCar(slug);
 
   if (!car) return { title: "Car not found" };
-
-  return {
-    title: `${car.model} ${car.variant} ${car.year}`,
-    description: `Explore ${car.model} ${car.variant}: ${car.fuel}, ${car.year}, ${car.status.toLowerCase()}. Sample Brand X stock from Company A, Lucknow.`,
-  };
+  return carMetadata(car, await requestLanguage());
 }
 
 export default async function CarPage({ params }: CarPageProps) {
@@ -46,6 +44,10 @@ export default async function CarPage({ params }: CarPageProps) {
 
   return (
     <div lang={language}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(carJsonLd(car)) }}
+      />
       <SiteHeader language={language} />
       <CarDetail
         car={car}

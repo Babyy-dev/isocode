@@ -6,8 +6,20 @@ import {
 } from "@/features/cars/components/catalogue-hero";
 import { CarCatalogue } from "@/features/cars/components/car-catalogue";
 import { listCars, toCar } from "@/features/cars/repository";
-export const dynamic = "force-dynamic";
 import { requestLanguage } from "@/lib/i18n/request-language";
+import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const language = await requestLanguage();
+  return {
+    alternates: {
+      canonical: language === "hi" ? "/?lang=hi" : "/",
+      languages: { "en-IN": "/", "hi-IN": "/?lang=hi", "x-default": "/" },
+    },
+  };
+}
 
 type HomePageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
