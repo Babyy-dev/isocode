@@ -45,7 +45,7 @@ src/
     mongodb/            # Connection lifecycle and document types
   stores/               # Temporary shared frontend state
 scripts/                # Explicit database check/setup/seed commands
-public/images/cars/     # Illustrative photography and source credits
+public/                 # Car photos (model-*.jpg) and their credits
 ```
 
 Keep functions focused, UI separate from business logic, and queries in feature repositories. Create files only when needed. Use local React state for local behavior, Zustand for shared UI state, and MongoDB for persistent business records. Ask before new technology or product decisions. Never store secrets or actual buyer data in the repo.
@@ -58,7 +58,7 @@ Keep functions focused, UI separate from business logic, and queries in feature 
 - Demo prices, bookings, assignment, replies and opt-out use memory-only Zustand state. Navigate with internal links; refreshing clears the session.
 - Preview routes now require a database session, with admin/consultant role checks on staff pages. No real messages are sent, and there is no cross-user booking protection or persistent record ownership yet.
 - MongoDB repositories exist but the UI is not connected to them yet. A valid URI alone does not enable persistent bookings.
-- Missing inspection, owners and registration details are not fabricated. Photos are illustrative; see [credits](./public/images/cars/credits.md).
+- Missing inspection, owners and registration details are not fabricated. Photos are illustrative; see [credits](./public/credits.md).
 - Catalogue/detail browsing supports Hindi. Full Hindi coverage and browser QA are deferred by the user.
 - AI is explicitly unavailable until provider setup is agreed.
 

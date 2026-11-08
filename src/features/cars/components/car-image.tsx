@@ -2,15 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import modelH from "../../../../public/images/cars/model-h.webp";
-import modelC from "../../../../public/images/cars/model-c.webp";
-import modelS from "../../../../public/images/cars/model-s.webp";
-
-const carImages = {
-  "NEW-H-02": modelH,
-  "UC-1182": modelC,
-  "UC-1190": modelS,
-};
+import { sampleImageFor } from "../sample-images";
 import type { Car } from "../types";
 
 type CarImageProps = { car: Car; priority?: boolean; sizes: string };
@@ -26,7 +18,7 @@ export function CarImage({ car, priority = false, sizes }: CarImageProps) {
         sizes={sizes}
       />
     );
-  const sample = carImages[car.stockId as keyof typeof carImages];
+  const sample = sampleImageFor(car.stockId);
   if (!sample) return <PhotoPlaceholder />;
   return (
     <Image
