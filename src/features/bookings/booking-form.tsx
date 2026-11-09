@@ -193,7 +193,7 @@ export function BookingForm({
                   }
                   aria-pressed={time === value}
                   onClick={() => setTime(value)}
-                  className={`border border-line p-3 text-sm disabled:cursor-not-allowed disabled:opacity-30 ${time === value ? "bg-accent text-white" : "bg-white"}`}
+                  className={`border border-line p-3 text-sm disabled:cursor-not-allowed disabled:opacity-30 ${time === value ? "bg-accent text-on-accent" : "bg-page"}`}
                 >
                   {value}
                 </button>
@@ -236,7 +236,7 @@ export function BookingForm({
           >
             {pending ? copy.form.submitting : copy.form.submit}
           </button>
-          <p role="alert" className="text-sm text-red-700">
+          <p role="alert" className="text-sm text-danger">
             {message}
           </p>
         </fieldset>

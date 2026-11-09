@@ -33,7 +33,7 @@ export default async function AccountPage({
           {session.user.email} · {copy.roles[role]}
         </p>
         {query.access === "denied" && (
-          <p role="alert" className="mt-6 text-red-700">
+          <p role="alert" className="mt-6 text-danger">
             {copy.denied}
           </p>
         )}

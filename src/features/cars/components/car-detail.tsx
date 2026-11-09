@@ -26,7 +26,7 @@ export function CarDetail({
   return (
     <main id="main-content" className="page-container py-8">
       <Link
-        href={`/?lang=${language}#collection`}
+        href="/#collection"
         className="inline-flex min-h-11 items-center gap-2 text-xs text-muted hover:text-accent"
       >
         <span aria-hidden>←</span>

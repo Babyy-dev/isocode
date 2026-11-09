@@ -53,7 +53,7 @@ function CheckRow({ check, language }: { check: InspectionCheck; language: Langu
       <span
         aria-hidden
         className={`mt-0.5 grid size-5 place-items-center rounded-full text-[0.65rem] ${
-          passed ? "bg-accent text-white" : "border border-ink text-ink"
+          passed ? "bg-accent text-on-accent" : "border border-ink text-ink"
         }`}
       >
         {passed ? "✓" : "!"}

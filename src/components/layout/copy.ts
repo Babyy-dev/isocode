@@ -5,6 +5,10 @@ export const layoutCopy = {
   en: {
     switchTo: "हिन्दी",
     switchLabel: "हिन्दी में देखें",
+    switching: "Switching…",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    theme: { label: "Switch light or dark theme", dark: "Dark mode", light: "Light mode" },
     nav: {
       label: "Main navigation",
       account: "Account",
@@ -25,6 +29,10 @@ export const layoutCopy = {
   hi: {
     switchTo: "English",
     switchLabel: "View in English",
+    switching: "बदल रहा है…",
+    openMenu: "मेनू खोलें",
+    closeMenu: "मेनू बंद करें",
+    theme: { label: "लाइट या डार्क थीम बदलें", dark: "डार्क मोड", light: "लाइट मोड" },
     nav: {
       label: "मुख्य नेविगेशन",
       account: "खाता",

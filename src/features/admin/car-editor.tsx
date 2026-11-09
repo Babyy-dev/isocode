@@ -85,7 +85,7 @@ export function CarEditor({
           </button>
         </div>
       </fieldset>
-      <p role="alert" className="mt-4 text-sm text-red-700">
+      <p role="alert" className="mt-4 text-sm text-danger">
         {message}
       </p>
     </form>

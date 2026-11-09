@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { requestLanguage } from "@/lib/i18n/request-language";
 import { siteUrl } from "@/lib/site";
+import { requestTheme } from "@/lib/theme/request-theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const language = await requestLanguage();
+  const [language, theme] = await Promise.all([requestLanguage(), requestTheme()]);
   return (
-    <html lang={language}>
+    <html lang={language} data-theme={theme}>
       <body>{children}</body>
     </html>
   );

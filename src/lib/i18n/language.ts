@@ -1,5 +1,6 @@
 export type Language = "en" | "hi";
 
+/** A session cookie: the choice lasts for the visit, and every new visit starts in English. */
 export const LANGUAGE_COOKIE = "lang";
 export const DEFAULT_LANGUAGE: Language = "en";
 

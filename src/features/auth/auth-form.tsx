@@ -105,7 +105,7 @@ export function AuthForm({ mode, returnTo, language }: AuthFormProps) {
           >
             {pending ? copy.wait : isSignUp ? copy.createAccount : copy.signIn}
           </button>
-          <p role="alert" className="text-sm text-red-700">
+          <p role="alert" className="text-sm text-danger">
             {error}
           </p>
         </form>

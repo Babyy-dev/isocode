@@ -54,9 +54,9 @@ export function CatalogueHero({
               </p>
             </div>
             <Link
-              href={carPath(car, language)}
+              href={carPath(car)}
               aria-label={copy.viewCar}
-              className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/60 text-xl transition-colors hover:bg-white hover:text-ink"
+              className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/60 text-xl transition-colors hover:bg-white hover:text-black"
             >
               ↗
             </Link>

@@ -16,7 +16,7 @@ export function SiteFooter({ language }: { language: Language }) {
             <p className="mt-4 text-sm text-muted">{copy.footerText}</p>
           </div>
           <Link
-            href={`/?lang=${language}#collection`}
+            href="/#collection"
             className="text-sm font-semibold text-accent"
           >
             {copy.browse} <span aria-hidden>↗</span>

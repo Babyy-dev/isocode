@@ -98,7 +98,7 @@ export function LeadWorkspace({
 
 const timerTone = {
   waiting: "text-accent",
-  overdue: "font-medium text-red-700",
+  overdue: "font-medium text-danger",
   met: "text-muted",
   missed: "text-muted",
 } as const;

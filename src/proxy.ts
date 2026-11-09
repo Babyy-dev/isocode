@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { LANGUAGE_COOKIE, parseLanguage } from "@/lib/i18n/language";
 
-const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
-
 /**
  * Remembers the language chosen with `?lang=en|hi`. The cookie is written to the
  * incoming request too, so the page rendered for this same request already sees it.
  */
 export function proxy(request: NextRequest) {
+  // Background prefetches are not a visitor's choice; only real navigations may set the language.
+  if (isPrefetch(request)) return NextResponse.next();
   const chosen = parseLanguage(request.nextUrl.searchParams.get("lang"));
   if (!chosen || request.cookies.get(LANGUAGE_COOKIE)?.value === chosen)
     return NextResponse.next();
@@ -15,10 +15,17 @@ export function proxy(request: NextRequest) {
   const response = NextResponse.next({ request: { headers: request.headers } });
   response.cookies.set(LANGUAGE_COOKIE, chosen, {
     path: "/",
-    maxAge: ONE_YEAR_SECONDS,
     sameSite: "lax",
   });
   return response;
+}
+
+function isPrefetch(request: NextRequest) {
+  return (
+    request.headers.has("next-router-prefetch") ||
+    request.headers.get("purpose") === "prefetch" ||
+    request.headers.get("sec-purpose")?.includes("prefetch") === true
+  );
 }
 
 export const config = {
