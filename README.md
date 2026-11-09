@@ -2,7 +2,7 @@
 
 Website, lead desk and admin for Company A, an authorised Brand X car dealer in Lucknow. Buyers browse new and certified used cars with the on-road price by city, then book a test drive online. Each booking becomes a lead that is assigned to a named consultant immediately and acknowledged automatically.
 
-- **Live app:** _add the Vercel URL_
+- **Live app:** https://isocode-alpha.vercel.app
 - **Run, deploy and demo logins:** [deployment.md](./deployment.md)
 
 ## Features

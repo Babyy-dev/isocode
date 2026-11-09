@@ -1,7 +1,7 @@
 # Company A Showroom — Deployment and Run Guide
 
 - **GitHub:** https://github.com/Babyy-dev/isocode
-- **Live app:** `TODO: add the Vercel URL after deploying`
+- **Live app:** https://isocode-alpha.vercel.app
 
 ## Demo logins for the reviewer
 
@@ -85,7 +85,7 @@ Names only. Never commit values; `.env` is git-ignored.
 | `BETTER_AUTH_SECRET` | Yes      | Random secret of 32+ characters for signing sessions.                                                                                           |
 | `BETTER_AUTH_URL`    | Yes      | Exact public origin, e.g. `http://localhost:3000` or the HTTPS Vercel URL.                                                                      |
 | `GROQ_API_KEY` | For AI | Groq API key for the buyer summary and first-reply draft. Without it the AI panel says it is unavailable and manual replies still work. |
-| `GROQ_MODEL` | For AI | Groq model id, e.g. `llama-3.3-70b-versatile`. |
+| `GROQ_MODEL` | For AI | Groq model id, e.g. `openai/gpt-oss-20b` (the model verified with `npm run ai:check`). |
 | `SITE_URL`           | No       | Public origin for canonical URLs, sitemap and social previews. Defaults to `BETTER_AUTH_URL`.                                                   |
 
 ## How it is deployed (Vercel + MongoDB Atlas)
