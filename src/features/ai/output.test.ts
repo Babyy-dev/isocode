@@ -40,28 +40,17 @@ test("AI and manual replies reject pricing and discount language", () => {
     ),
   );
 });
-test("Gemini blocked, unfinished and empty answers are handled explicitly", () => {
+test("Groq refusals, cut-off and empty answers are handled explicitly", () => {
   const response = {
-    candidates: [
-      { finishReason: "STOP", content: { parts: [{ text: JSON.stringify(valid) }] } },
-    ],
+    choices: [{ finish_reason: "stop", message: { content: JSON.stringify(valid) } }],
   };
   assert.deepEqual(parseAssistance(extractResponseText(response)), valid);
-  const withThought = {
-    candidates: [
-      {
-        finishReason: "STOP",
-        content: { parts: [{ text: "reasoning…", thought: true }, { text: JSON.stringify(valid) }] },
-      },
-    ],
-  };
-  assert.deepEqual(parseAssistance(extractResponseText(withThought)), valid);
   for (const bad of [
-    { promptFeedback: { blockReason: "SAFETY" } },
-    { candidates: [] },
-    { candidates: [{ ...response.candidates[0], finishReason: "SAFETY" }] },
-    { candidates: [{ ...response.candidates[0], finishReason: "MAX_TOKENS" }] },
-    { candidates: [{ finishReason: "STOP", content: { parts: [] } }] },
+    { choices: [] },
+    { choices: [{ finish_reason: "length", message: { content: "{\"summary\":" } }] },
+    { choices: [{ finish_reason: "content_filter", message: { content: "" } }] },
+    { choices: [{ finish_reason: "stop", message: { content: null, refusal: "I can't help" } }] },
+    { choices: [{ finish_reason: "stop", message: { content: "" } }] },
   ])
     assert.throws(() => extractResponseText(bad), JSON.stringify(bad));
 });

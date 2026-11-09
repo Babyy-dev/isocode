@@ -24,7 +24,7 @@ Tips:
 
 ## Run it locally
 
-Requirements: **Node.js 22** and npm, a **MongoDB Atlas** cluster (the free M0 tier works), and optionally a **Google AI Studio (Gemini) API key**.
+Requirements: **Node.js 22** and npm, a **MongoDB Atlas** cluster (the free M0 tier works), and optionally a **Groq API key** ([console.groq.com/keys](https://console.groq.com/keys)).
 
 1. **Clone and install**
 
@@ -68,7 +68,7 @@ Requirements: **Node.js 22** and npm, a **MongoDB Atlas** cluster (the free M0 t
    npm run typecheck    # run `npm run dev` or `npm run build` once first so Next.js generates its types
    npm run build && npm start   # production build
    npm run auth:check   # live sign-up / sign-in / role-escalation check (creates and removes a test user)
-   npm run ai:check     # three live Gemini requests (needs GEMINI_API_KEY with credit)
+   npm run ai:check     # three live Groq requests (needs GROQ_API_KEY)
    npm run bookings:check  # booking concurrency test in a temporary database (see note below)
    ```
 
@@ -84,8 +84,8 @@ Names only. Never commit values; `.env` is git-ignored.
 | `MONGODB_DB_NAME`    | Yes      | Database name used by the app.                                                                                                                  |
 | `BETTER_AUTH_SECRET` | Yes      | Random secret of 32+ characters for signing sessions.                                                                                           |
 | `BETTER_AUTH_URL`    | Yes      | Exact public origin, e.g. `http://localhost:3000` or the HTTPS Vercel URL.                                                                      |
-| `GEMINI_API_KEY`     | For AI   | Google AI Studio key for the buyer summary and first-reply draft. Without it the AI panel says it is unavailable and manual replies still work. |
-| `GEMINI_MODEL`       | For AI   | Model name, e.g. `gemini-2.5-flash`.                                                                                                            |
+| `GROQ_API_KEY` | For AI | Groq API key for the buyer summary and first-reply draft. Without it the AI panel says it is unavailable and manual replies still work. |
+| `GROQ_MODEL` | For AI | Groq model id, e.g. `llama-3.3-70b-versatile`. |
 | `SITE_URL`           | No       | Public origin for canonical URLs, sitemap and social previews. Defaults to `BETTER_AUTH_URL`.                                                   |
 
 ## How it is deployed (Vercel + MongoDB Atlas)
@@ -124,8 +124,8 @@ A consultant sees only the leads assigned to their linked profile. An unlinked c
 
 | Symptom                                           | Cause and fix                                                                                                                                           |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AI panel: "AI provider credits are used up"       | The Gemini project's prepaid balance is zero. Add credit in AI Studio → Billing, or use a key from a project without billing (free tier, daily limits). |
-| AI panel: "AI is not configured"                  | `GEMINI_API_KEY` / `GEMINI_MODEL` missing. Set them and restart the server.                                                                             |
+| AI panel: "rate limit or quota reached" | The Groq key hit its per-minute or daily limit. Wait, or raise the limit in the Groq console. |
+| AI panel: "AI is not configured" | `GROQ_API_KEY` / `GROQ_MODEL` missing. Set them and restart the server. |
 | "Too many attempts" at sign-in                    | 5 sign-ins per minute per IP. Wait a minute.                                                                                                            |
 | `bookings:check` fails with `AtlasError`          | The database user can't create a temporary database. Grant "Read and write to any database".                                                            |
 | Pages keep reloading in `npm run dev`             | Restart the dev server (seen after `.env` edits). Production builds are not affected.                                                                   |

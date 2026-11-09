@@ -1,25 +1,25 @@
 import "server-only";
 import { AiError } from "./types";
-import { assistanceInstructions, assistanceSchema, redactContactDetails } from "./prompt";
+import { assistanceInstructions, redactContactDetails } from "./prompt";
 import { extractResponseText, parseAssistance } from "./output";
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const TIMEOUT_MS = 20_000;
 
 export function aiConfiguration() {
-  const key = process.env.GEMINI_API_KEY?.trim();
-  const model = process.env.GEMINI_MODEL?.trim();
+  const key = process.env.GROQ_API_KEY?.trim();
+  const model = process.env.GROQ_MODEL?.trim();
   if (!key || !model)
     throw new AiError(
-      "AI is not configured. Ask the operator to set GEMINI_API_KEY and GEMINI_MODEL. Manual replies remain available.",
+      "AI is not configured. Ask the operator to set GROQ_API_KEY and GROQ_MODEL. Manual replies remain available.",
     );
   return { key, model };
 }
 
-/** One Gemini call: no automatic retries, bounded output, then strict validation. */
+/** One Groq call: no automatic retries, bounded output, then strict validation. */
 export async function generateAssistance(needs: string, modelName: string, language: "en" | "hi") {
   const { key, model } = aiConfiguration();
-  const response = await callGemini(key, model, requestBody(needs, modelName, language));
+  const response = await callGroq(key, requestBody(model, needs, modelName, language));
   if (!response.ok) throw errorForStatus(response.status);
   let body: unknown;
   try {
@@ -30,39 +30,29 @@ export async function generateAssistance(needs: string, modelName: string, langu
   return { ...parseAssistance(extractResponseText(body)), model };
 }
 
-function requestBody(needs: string, carModel: string, preferredLanguage: "en" | "hi") {
+function requestBody(model: string, needs: string, carModel: string, preferredLanguage: "en" | "hi") {
   return {
-    systemInstruction: { parts: [{ text: assistanceInstructions }] },
-    contents: [
+    model,
+    messages: [
+      { role: "system", content: assistanceInstructions },
       {
         role: "user",
-        parts: [
-          {
-            // Buyer text is passed as data, never concatenated into the instructions.
-            text: JSON.stringify({
-              buyerNeeds: redactContactDetails(needs),
-              carModel,
-              preferredLanguage,
-            }),
-          },
-        ],
+        // Buyer text is passed as data, never concatenated into the instructions.
+        content: JSON.stringify({ buyerNeeds: redactContactDetails(needs), carModel, preferredLanguage }),
       },
     ],
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: assistanceSchema,
-      temperature: 0.3,
-      // Generous ceiling: "thinking" models spend part of it before answering.
-      maxOutputTokens: 4096,
-    },
+    // JSON mode works on every Groq chat model; parseAssistance enforces the exact shape.
+    response_format: { type: "json_object" },
+    temperature: 0.3,
+    max_completion_tokens: 1400,
   };
 }
 
-async function callGemini(key: string, model: string, body: object) {
+async function callGroq(key: string, body: object) {
   try {
-    return await fetch(`${GEMINI_URL}/${encodeURIComponent(model)}:generateContent`, {
+    return await fetch(GROQ_URL, {
       method: "POST",
-      headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(TIMEOUT_MS),
       cache: "no-store",
@@ -74,14 +64,14 @@ async function callGemini(key: string, model: string, body: object) {
 
 function errorForStatus(status: number) {
   if (status === 429)
-    return new AiError("AI provider quota is used up for now. Try later or write a manual reply.");
-  if (status === 402)
-    return new AiError("AI provider credits are used up. Ask the operator to top up billing; manual replies remain available.");
-  if (status === 400 || status === 401 || status === 403)
-    return new AiError("AI key or request was rejected. Ask the operator to check GEMINI_API_KEY.");
+    return new AiError("AI provider rate limit or quota reached. Try again shortly or write a manual reply.");
+  if (status === 401 || status === 403)
+    return new AiError("AI key was rejected. Ask the operator to check GROQ_API_KEY.");
   if (status === 404)
-    return new AiError("AI model not found. Ask the operator to check GEMINI_MODEL.");
-  if (status === 503)
-    return new AiError("AI provider is overloaded right now. Try again shortly or write a manual reply.");
+    return new AiError("AI model not found. Ask the operator to check GROQ_MODEL.");
+  if (status === 400)
+    return new AiError("AI could not produce a valid draft for this lead. Try again or write a manual reply.");
+  if (status === 498 || status === 503)
+    return new AiError("AI provider is over capacity right now. Try again shortly or write a manual reply.");
   return new AiError("AI provider could not process this request. Manual replies remain available.");
 }
